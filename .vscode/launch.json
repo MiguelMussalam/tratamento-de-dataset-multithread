@@ -2,10 +2,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Run C++ Project",
+            "name": "Run C++ Project (WSL)",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/main.exe",
+            "program": "${workspaceFolder}/build/main",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -13,7 +13,7 @@
             "externalConsole": false,
             "preLaunchTask": "Build C++ Project",
             "MIMode": "gdb",
-            "miDebuggerPath": "C:\\msys64\\mingw64\\bin\\gdb.exe",
+            "miDebuggerPath": "/usr/bin/gdb",
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",
