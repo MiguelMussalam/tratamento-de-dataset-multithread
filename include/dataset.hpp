@@ -1,15 +1,20 @@
 #pragma once
 #include <string>
 #include <vector>
-#include <queue>
-#include <mutex>
-#include <condition_variable>
-#include <thread>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <unordered_map>
+#include <memory>
+
+struct EstatisticasNumericas{
+  double media = 0;
+  double mediana = 0;
+  double variancia = 0;
+  double desvio_padrao = 0;
+  double iqr = 0;
+};
 
 enum TipoColuna { CATEGORICA, NUMERICA, DESCONHECIDA };
 
@@ -20,13 +25,14 @@ struct Coluna {
   std::vector<double> valores;
   std::unordered_map<std::string, int> mapeamento;
   std::vector<std::string> categorias;
+  std::unique_ptr<EstatisticasNumericas> estatisticas;
 };
 
 class Dataset {
 private:
   std::vector<Coluna> colunas;
-  std::size_t num_linhas = 0;
-  std::size_t num_colunas = 0;
+  size_t num_linhas = 0;
+  size_t num_colunas = 0;
 
   void lerArquivo(const char *caminho);
 
