@@ -3,6 +3,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <math.h>
+#include <algorithm>
+#include <iomanip>
 
 Dataset::Dataset(const char *caminho){
   lerArquivo(caminho); 
@@ -128,12 +131,16 @@ void Dataset::lerArquivo(const char *caminho) {
         cursor_init_linha = tam_substr + 1;
       }
 
-      auto [ptr, ec] = std::from_chars(conteudo.data(),
-                                       conteudo.data() + conteudo.size(), v);
+
+      auto [ptr, ec] = std::from_chars(conteudo.data(), conteudo.data() + conteudo.size(), v);
 
       // valor encaixa em double ou não
       if (ec == std::errc() && ptr == conteudo.data() + conteudo.size()) {
-        colunas[coluna_atual].valores.push_back(v);
+          if (colunas[coluna_atual].tipo == CATEGORICA) {
+              categorizar(conteudo, coluna_atual);
+          } else {
+              colunas[coluna_atual].valores.push_back(v);
+          }
       } else {
         if (colunas[coluna_atual].tipo != CATEGORICA) {
           colunas[coluna_atual].tipo = CATEGORICA;
@@ -146,6 +153,7 @@ void Dataset::lerArquivo(const char *caminho) {
     cursor_init_linha = 0;
     coluna_atual = 0;
     num_linhas++;
+
     if (cursor_fim_arquivo == std::string_view::npos) {
       cursor_init_arquivo = arquivo.size();
     } else {
@@ -176,7 +184,9 @@ void Dataset::ReprocessarCategorizacao(size_t indice_coluna) {
   colunas[indice_coluna].valores.clear();
 
   for (double val : valores_anteriores) {
-    std::string chave = std::to_string(val);
+    char buffer[64];
+    auto [ptr, ec] = std::to_chars(buffer, buffer + sizeof(buffer), val);
+    std::string chave(buffer, ptr);
 
     auto it = colunas[indice_coluna].mapeamento.find(chave);
     if (it == colunas[indice_coluna].mapeamento.end()) {
@@ -191,47 +201,135 @@ void Dataset::ReprocessarCategorizacao(size_t indice_coluna) {
 }
 
 void Dataset::rotina_coluna_numerica(size_t indice_coluna) {
+  const std::vector<double>& valores_originais = colunas[indice_coluna].valores;
   colunas[indice_coluna].estatisticas = std::make_unique<EstatisticasNumericas>();
-  colunas[indice_coluna].estatisticas->media = media(indice_coluna);
-  colunas[indice_coluna].estatisticas->mediana = mediana(indice_coluna);
-  colunas[indice_coluna].estatisticas->variancia = variancia(indice_coluna, colunas[indice_coluna].estatisticas->media);
-  colunas[indice_coluna].estatisticas->desvio_padrao = desvio_padrao(indice_coluna, colunas[indice_coluna].estatisticas->variancia);
-  colunas[indice_coluna].estatisticas->iqr = iqr(indice_coluna);
+  EstatisticasNumericas& estatisticas = *colunas[indice_coluna].estatisticas;
+
+  estatisticas.media        = media(valores_originais);
+  estatisticas.variancia    = variancia(valores_originais, estatisticas.media);
+  estatisticas.desvio_padrao= desvio_padrao(estatisticas.variancia);
+  
+  std::vector<double> valores_para_ordenar = valores_originais; 
+  
+  estatisticas.mediana      = mediana(valores_para_ordenar);
+  estatisticas.iqr          = iqr(valores_para_ordenar);
 }
 
-double Dataset::media(size_t indice_coluna) {
+
+double Dataset::media(const std::vector<double>& valores_coluna) {
   double media = 0;
 
   for(size_t i = 0; i < (num_linhas); i++){
-    media += colunas[indice_coluna].valores[i];
+    media += valores_coluna[i];
   }
 
   media = media / (num_linhas);
-
-
   return media;
 }
 
-double Dataset::variancia(size_t indice_coluna, double media) {
-  double variancia;
+double Dataset::variancia(const std::vector<double>& valores_coluna, double media) {
+    double soma = 0;
 
-  return variancia;
+    for (const double& valor : valores_coluna) {
+        double diferenca = valor - media;
+        soma += diferenca * diferenca;
+    }
+
+    return soma / valores_coluna.size();
 }
 
-double Dataset::desvio_padrao(size_t indice_coluna, double variancia) {
-  double desvio_padrao;
-
-  return desvio_padrao;
+double Dataset::desvio_padrao(double variancia) {
+  return std::sqrt(variancia);
 }
 
-double Dataset::mediana(size_t indice_coluna) {
-  double mediana;
+double Dataset::mediana(std::vector<double>& valores_coluna) {
+    size_t n = valores_coluna.size();
+    size_t meio = n / 2;
 
-  return mediana;
+    std::nth_element(valores_coluna.begin(), valores_coluna.begin() + meio, valores_coluna.end());
+
+    if (n % 2 == 1) {
+        return valores_coluna[meio];
+    } else {
+        double maior_inferior = *std::max_element(valores_coluna.begin(), valores_coluna.begin() + meio);
+        return (maior_inferior + valores_coluna[meio]) / 2.0;
+    }
 }
 
-double Dataset::iqr(size_t indice_coluna) {
-  double iqr;
+double Dataset::iqr(std::vector<double>& valores_coluna) {
+    size_t n = valores_coluna.size();
 
-  return iqr;
+    // Q1 — mediana da metade inferior
+    size_t pos_q1 = n / 4;
+    std::nth_element(valores_coluna.begin(),
+                     valores_coluna.begin() + pos_q1,
+                     valores_coluna.end());
+    double q1 = valores_coluna[pos_q1];
+
+    // Q3 — mediana da metade superior
+    size_t pos_q3 = (3 * n) / 4;
+    std::nth_element(valores_coluna.begin(),
+                     valores_coluna.begin() + pos_q3,
+                     valores_coluna.end());
+    double q3 = valores_coluna[pos_q3];
+
+    return q3 - q1;
+}
+
+void Dataset::print() {
+    std::cout << std::left
+              << std::setw(30) << "Coluna"
+              << std::setw(14) << "Tipo"
+              << std::setw(14) << "Media"
+              << std::setw(14) << "Mediana"
+              << std::setw(14) << "DesvPad"
+              << std::setw(14) << "IQR"
+              << std::setw(14) << "Qtd Categorias" << "\n";
+    std::cout << std::string(114, '-') << "\n";
+
+    for (size_t j = 0; j < num_colunas; j++) {
+        std::cout << std::left << std::setw(30) << colunas[j].nome;
+
+        if (colunas[j].tipo == NUMERICA && colunas[j].estatisticas) {
+            std::cout << std::setw(14) << "NUMERICA"
+                      << std::fixed << std::setprecision(2)
+                      << std::setw(14) << colunas[j].estatisticas->media
+                      << std::setw(14) << colunas[j].estatisticas->mediana
+                      << std::setw(14) << colunas[j].estatisticas->desvio_padrao
+                      << std::setw(14) << colunas[j].estatisticas->iqr
+                      << std::setw(14) << "-";
+        } else {
+            std::cout << std::setw(14) << "CATEGORICA"
+                      << std::setw(14) << "-"
+                      << std::setw(14) << "-"
+                      << std::setw(14) << "-"
+                      << std::setw(14) << "-"
+                      << std::setw(14) << colunas[j].categorias.size();
+        }
+        std::cout << "\n";
+    }
+
+    std::cout << "\n" << std::string(60, '=') << "\n";
+    std::cout << "MAPEAMENTOS DAS COLUNAS CATEGÓRICAS\n";
+    std::cout << std::string(60, '=') << "\n\n";
+
+    for (size_t j = 0; j < num_colunas; j++) {
+        if (colunas[j].tipo == CATEGORICA && !colunas[j].categorias.empty()) {
+            std::cout << ">>> Coluna: " << colunas[j].nome << "\n";
+            std::cout << std::left << std::setw(10) << "ID" << "Categoria\n";
+            std::cout << std::string(40, '-') << "\n";
+            
+            // Limite de 20 categorias na tela para não travar o terminal
+            size_t max_print = std::min<size_t>(20, colunas[j].categorias.size());
+            for (size_t i = 0; i < max_print; i++) {
+                std::cout << std::left << std::setw(10) << i << colunas[j].categorias[i] << "\n";
+            }
+            
+            if (colunas[j].categorias.size() > max_print) {
+                std::cout << std::left << std::setw(10) << "..." 
+                          << "... (mais " << colunas[j].categorias.size() - max_print << " categorias ocultas)\n";
+            }
+            std::cout << "\n";
+        }
+    }
 }

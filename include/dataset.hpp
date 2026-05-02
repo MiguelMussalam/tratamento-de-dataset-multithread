@@ -40,15 +40,16 @@ private:
   void ReprocessarCategorizacao(size_t indice_atual);
 
   void rotina_coluna_numerica(size_t indice_coluna);
-  double media(size_t indice_coluna);
-  double variancia(size_t indice_coluna, double media);
-  double desvio_padrao(size_t indice_coluna, double variancia);
-  double mediana(size_t indice_coluna);
-  double iqr(size_t indice_coluna);
+  double media(const std::vector<double>& valores_coluna);
+  double variancia(const std::vector<double>& valores_coluna, double media);
+  double desvio_padrao(double variancia);
+  double mediana(std::vector<double>& valores_coluna);
+  double iqr(std::vector<double>& valores_coluna);
 
 
 public:
   Dataset(const char *caminho);
+  void print();
 };
 
 /*
