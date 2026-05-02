@@ -1,0 +1,9 @@
+event syntax error: 'context-switches:u,cpu-migrations:u,page-faults:u,task-clock:u,L1-dcache-load-misses:u,LLC-loads:u,branch-misses:u,branches:u,cpu-..'
+                     \___ Bad event name
+
+Unable to find event on a PMU of 'context-switches'
+Run 'perf list' for a list of valid events
+
+ Usage: perf stat [<options>] [<command>]
+
+    -e, --event <event>   event selector. use 'perf list' to list available events

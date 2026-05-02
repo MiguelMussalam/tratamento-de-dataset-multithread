@@ -48,6 +48,9 @@ void Dataset::lerArquivo(const char *caminho) {
   }
 
   close(fd);
+
+  madvise(mapped, size, MADV_SEQUENTIAL);
+
   std::string_view arquivo = {static_cast<const char *>(mapped), size};
   std::string_view linha;
   std::string_view conteudo;
