@@ -1,4 +1,7 @@
-build/
+build/*
+!build/.gitkeep
+resultados_perf/*
+!resultados_perf/.gitkeep
 *.exe
 *.out
 *.csv

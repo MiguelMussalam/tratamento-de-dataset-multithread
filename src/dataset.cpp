@@ -168,11 +168,10 @@ void Dataset::lerArquivo(const char *caminho) {
 }
 
 void Dataset::categorizar(std::string_view conteudo, size_t indice_coluna) {
-  std::string chave(conteudo);
-
-  auto it = colunas[indice_coluna].mapeamento.find(chave);
+  auto it = colunas[indice_coluna].mapeamento.find(conteudo);
 
   if (it == colunas[indice_coluna].mapeamento.end()) {
+    std::string chave(conteudo);
     int indice = colunas[indice_coluna].categorias.size();
     colunas[indice_coluna].mapeamento[chave] = indice;
     colunas[indice_coluna].categorias.push_back(chave);
@@ -212,7 +211,7 @@ void Dataset::rotina_coluna_numerica(size_t indice_coluna) {
   estatisticas.variancia    = variancia(valores_originais, estatisticas.media);
   estatisticas.desvio_padrao= desvio_padrao(estatisticas.variancia);
   
-  std::vector<double> valores_para_ordenar = valores_originais; 
+  std::vector<double> valores_para_ordenar(valores_originais); 
   
   estatisticas.mediana      = mediana(valores_para_ordenar);
   estatisticas.iqr          = iqr(valores_para_ordenar);

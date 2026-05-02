@@ -4,7 +4,7 @@
 
 int main() {
   auto t0 = std::chrono::high_resolution_clock::now();
-  Dataset dataset("data/dataset_raw.csv");
+  Dataset dataset("data/02-20-2018.csv");
   auto t1 = std::chrono::high_resolution_clock::now();
 
   auto total = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0);

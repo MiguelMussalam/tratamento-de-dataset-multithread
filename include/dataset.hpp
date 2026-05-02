@@ -7,6 +7,14 @@
 #include <unistd.h>
 #include <unordered_map>
 #include <memory>
+#include <string_view>
+
+struct StringHash {
+    using is_transparent = void;
+    size_t operator()(std::string_view sv) const {
+        return std::hash<std::string_view>{}(sv);
+    }
+};
 
 struct EstatisticasNumericas{
   double media = 0;
@@ -23,7 +31,7 @@ struct Coluna {
   TipoColuna tipo = DESCONHECIDA;
 
   std::vector<double> valores;
-  std::unordered_map<std::string, int> mapeamento;
+  std::unordered_map<std::string, int, StringHash, std::equal_to<>> mapeamento;
   std::vector<std::string> categorias;
   std::unique_ptr<EstatisticasNumericas> estatisticas;
 };
