@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <memory>
 #include <string_view>
+#include <algorithm>
 
 struct StringHash {
     using is_transparent = void;
@@ -15,6 +16,8 @@ struct StringHash {
         return std::hash<std::string_view>{}(sv);
     }
 };
+
+using CategoriaMap = std::unordered_map<std::string, int, StringHash, std::equal_to<>>;
 
 struct EstatisticasNumericas{
   double media = 0;
@@ -31,7 +34,7 @@ struct Coluna {
   TipoColuna tipo = DESCONHECIDA;
 
   std::vector<double> valores;
-  std::unordered_map<std::string, int, StringHash, std::equal_to<>> mapeamento;
+  CategoriaMap mapeamento;
   std::vector<std::string> categorias;
   std::unique_ptr<EstatisticasNumericas> estatisticas;
 };

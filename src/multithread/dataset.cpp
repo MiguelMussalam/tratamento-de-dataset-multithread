@@ -79,14 +79,7 @@ void Dataset::lerArquivo(const char *caminho) {
 
   colunas.reserve(count);
   
-  size_t linhas_estimadas = arquivo.size() / 120;
-
-  for (auto& col : colunas) {
-      col.valores.reserve(linhas_estimadas);
-      col.mapeamento.reserve(linhas_estimadas);
-  }
-  std::cout << "Colunas: " << count << " | Capacity: " << colunas.capacity()
-            << std::endl;
+  std::cout << "Colunas: " << count << std::endl;
 
   // - criação do cabeçalho -
   size_t cursor_init_cab = 0;
@@ -106,6 +99,12 @@ void Dataset::lerArquivo(const char *caminho) {
     colunas.back().nome = std::string(conteudo);
     colunas.back().tipo = NUMERICA;
     num_colunas++;
+  }
+
+  size_t linhas_estimadas = arquivo.size() / 90;
+
+  for (auto& col : colunas) {
+      col.valores.reserve(linhas_estimadas);
   }
 
   // avança o cursor para pular o cabeçalho na leitura de dados
@@ -177,10 +176,9 @@ void Dataset::categorizar(std::string_view conteudo, size_t indice_coluna) {
   auto it = colunas[indice_coluna].mapeamento.find(conteudo);
 
   if (it == colunas[indice_coluna].mapeamento.end()) {
-    std::string chave(conteudo);
     int indice = colunas[indice_coluna].categorias.size();
-    colunas[indice_coluna].mapeamento[chave] = indice;
-    colunas[indice_coluna].categorias.push_back(chave);
+    colunas[indice_coluna].mapeamento.emplace(std::string(conteudo), indice);
+    colunas[indice_coluna].categorias.emplace_back(conteudo);
     colunas[indice_coluna].valores.push_back(indice);
   } else {
     colunas[indice_coluna].valores.push_back(it->second);
@@ -188,19 +186,18 @@ void Dataset::categorizar(std::string_view conteudo, size_t indice_coluna) {
 }
 
 void Dataset::ReprocessarCategorizacao(size_t indice_coluna) {
-  std::vector<double> valores_anteriores = colunas[indice_coluna].valores;
-  colunas[indice_coluna].valores.clear();
+  std::vector<double> valores_anteriores = std::move(colunas[indice_coluna].valores);
 
   for (double val : valores_anteriores) {
     char buffer[64];
     auto [ptr, ec] = std::to_chars(buffer, buffer + sizeof(buffer), val);
-    std::string chave(buffer, ptr);
+    std::string_view chave_temp(buffer, ptr - buffer);
 
-    auto it = colunas[indice_coluna].mapeamento.find(chave);
+    auto it = colunas[indice_coluna].mapeamento.find(chave_temp);
     if (it == colunas[indice_coluna].mapeamento.end()) {
       int indice = colunas[indice_coluna].categorias.size();
-      colunas[indice_coluna].mapeamento[chave] = indice;
-      colunas[indice_coluna].categorias.push_back(chave);
+      colunas[indice_coluna].mapeamento.emplace(std::string(chave_temp), indice);
+      colunas[indice_coluna].categorias.emplace_back(chave_temp);
       colunas[indice_coluna].valores.push_back(indice);
     } else {
       colunas[indice_coluna].valores.push_back(it->second);
