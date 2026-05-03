@@ -9,9 +9,8 @@ int main() {
 
   auto total = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0);
 
-  std::cout << "Total: " << total.count() << " ms" << std::endl;
-
   dataset.print();
-
+  std::cout << "Total: " << total.count() << " ms" << std::endl;
+  
   return 0;
 }

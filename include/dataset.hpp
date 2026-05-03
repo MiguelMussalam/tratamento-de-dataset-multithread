@@ -41,7 +41,7 @@ private:
   std::vector<Coluna> colunas;
   size_t num_linhas = 0;
   size_t num_colunas = 0;
-
+  
   void lerArquivo(const char *caminho);
 
   void categorizar(std::string_view conteudo, size_t indice_coluna);

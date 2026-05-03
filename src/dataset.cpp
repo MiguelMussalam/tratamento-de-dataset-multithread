@@ -8,7 +8,7 @@
 #include <iomanip>
 
 Dataset::Dataset(const char *caminho){
-  lerArquivo(caminho); 
+  lerArquivo(caminho);  // Segunda passagem: processa com pré-alocação
   
   for(size_t i = 0; i < num_colunas; i++){
     if(colunas[i].tipo == NUMERICA){
@@ -78,7 +78,13 @@ void Dataset::lerArquivo(const char *caminho) {
       count++;
 
   colunas.reserve(count);
+  
+  size_t linhas_estimadas = arquivo.size() / 120;
 
+  for (auto& col : colunas) {
+      col.valores.reserve(linhas_estimadas);
+      col.mapeamento.reserve(linhas_estimadas);
+  }
   std::cout << "Colunas: " << count << " | Capacity: " << colunas.capacity()
             << std::endl;
 
