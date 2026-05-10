@@ -6,3 +6,4 @@ resultados_perf/**/perf_trace.txt
 *.exe
 *.out
 *.csv
+!data/dataset_raw.csv
