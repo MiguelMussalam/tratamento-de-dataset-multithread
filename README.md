@@ -15,18 +15,35 @@ O projeto atingiu uma maturidade em que a complexidade do algoritmo base se esgo
 - `src/multithread/` e `include/multithread/`: É o ambiente principal de desenvolvimento atual. Aqui a paralelização é aplicada (usando partições de chunks, mutexes ou thread-pools) para dividir as leituras e escritas entre múltiplos núcleos de processamento.
 - `resultados_perf/`: Diretório que armazena os relatórios de compilação gerados pelo comando Perf. Possui subpastas (`seq/` e `mt/`) para que possamos comparar lado a lado o ganho de ciclos da versão Multithread contra a versão Sequencial.
 
-## Como Executar e Gerar Relatórios
+## Como Executar
 
-Para compilar e automaticamente gerar os traces de performance de uma versão, utilizamos o script `run.sh` passando o argumento da versão desejada (`seq` ou `mt`).
+Este projeto utiliza um **Makefile** para facilitar a compilação, execução rápida e o *profiling* com a ferramenta `perf`.
 
-**Para rodar a versão Sequencial (Baseline):**
+Por padrão, a execução rápida usa um dataset de testes menor (`data/dataset_raw.csv`), para agilizar verificações de código. Você pode sempre especificar qual arquivo quer rodar passando a variável `DATASET`.
+
+### 1. Execução Rápida (Sem Profiling de Hardware)
+Ideal para testar se o código compila e não dá erro, mensurando apenas o tempo de relógio:
+
 ```bash
-./run.sh seq
+# Executa a versão Sequencial (com o dataset padrão)
+make run_seq
+
+# Executa a versão Multithread (com o dataset padrão)
+make run_mt
+
+# Para especificar um arquivo gigante de 4GB:
+make run_seq DATASET=data/02-20-2018.csv
 ```
 
-**Para rodar a versão Multithread (Atual):**
+### 2. Gerar Relatórios de Performance (Com `perf`)
+Use isso caso você esteja num ambiente Linux suportado e queira mapear instruções de CPU, falhas de cache L1/L3, etc. *Nota: Pode exigir permissão de superusuário ou a configuração sysctl `kernel.perf_event_paranoid`.*
+
 ```bash
-./run.sh mt
+# Gera relatórios detalhados para o algoritmo base
+make profile_seq DATASET=data/02-20-2018.csv
+
+# Gera relatórios detalhados para o algoritmo multithread
+make profile_mt DATASET=data/02-20-2018.csv
 ```
 
 *Os relatórios serão salvos dentro de `resultados_perf/seq/` ou `resultados_perf/mt/`, incluindo o `perf_stat.txt` (métricas de hardware bruto) e o `perf_functions.txt` (análise temporal de cada função chamada).*
