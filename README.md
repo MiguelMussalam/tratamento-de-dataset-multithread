@@ -1,49 +1,106 @@
 # Tratamento de Dataset Multithread em C++
 
-Este projeto é um processador de grandes volumes de dados (datasets gigantes em CSV, como datasets de tráfego de rede) otimizado para extrair máxima performance do hardware. Ele realiza a leitura, *parsing* e **categorização** dos dados convertendo colunas de texto em IDs numéricos únicos usando Hash Maps, extraindo também estatísticas como Média, Desvio Padrão e IQR das colunas numéricas.
+Parser de alto desempenho para grandes datasets CSV. Realiza leitura, *parsing* e **categorização** de dados — convertendo colunas de texto em IDs numéricos via Hash Maps — e extrai estatísticas das colunas numéricas (**Média**, **Mediana**, **Desvio Padrão** e **IQR**).
+
+## Resultados de Performance (dataset de 4GB — `02-20-2018.csv`)
+
+| Versão | Wall Time | Speedup |
+|---|---|---|
+| Sequencial | ~21 seg | 1× (baseline) |
+| **Multithread** | **~5 seg** | **~4×** |
+
+---
 
 ## Como a Performance é Alcançada
-1. **Zero-Copy Parsing:** O projeto utiliza `mmap` para mapear o arquivo direto na memória RAM e `std::string_view` para fatiar as strings sem alocações dinâmicas na leitura das linhas.
-2. **Estruturas Nativas:** Utiliza `std::unordered_map` em C++20 com "Transparent Comparators" para buscar strings usando views, economizando processamento e reduzindo *cache misses*.
-3. **Análise de Hardware:** O repositório vem acoplado com um script de *profiling* utilizando o **Linux Perf**, gerando métricas de ciclos de CPU, falhas de página (*page-faults*), *branch-misses* e *callgraphs*.
+
+1. **Zero-Copy Parsing:** Usa `mmap` para mapear o arquivo direto na RAM e `std::string_view` para fatiar strings sem alocações dinâmicas durante a leitura.
+2. **Transparent Comparators:** `std::unordered_map` com comparadores transparentes busca strings usando views, eliminando cópias desnecessárias.
+3. **Paralelismo por Colunas (OpenMP):** A versão multithread distribui o processamento de colunas entre os núcleos do CPU, atingindo ~4× de speedup em arquivos de 4GB.
+4. **Eficiência de Memória (`float` em vez de `double`):** As colunas numéricas usam `float` (4 bytes) em vez de `double` (8 bytes), dobrando a capacidade de dados na RAM e no cache da CPU.
+5. **Eliminação de Rehashes:** `reserve(1024)` no `unordered_map` de categorização reduz as realocações de tabela hash durante o processamento.
+
+---
 
 ## Estrutura do Repositório
 
-O projeto atingiu uma maturidade em que a complexidade do algoritmo base se esgotou. Para ir além, o repositório está dividido em duas frentes de execução:
+```
+.
+├── src/
+│   ├── sequencial/       # Implementação single-thread (baseline de comparação)
+│   └── multithread/      # Implementação com OpenMP (desenvolvimento principal)
+├── include/
+│   ├── sequencial/
+│   └── multithread/
+├── resultados_perf/
+│   ├── seq/              # perf_stat.txt, perf_functions.txt, flamegraph.svg
+│   └── mt/               # perf_stat.txt, perf_functions.txt, flamegraph.svg
+├── data/                 # Datasets CSV (não versionados, exceto o de teste)
+├── tools/                # FlameGraph (clonado automaticamente, no .gitignore)
+└── Makefile
+```
 
-- `src/sequencial/` e `include/sequencial/`: Contém a implementação base (Single-thread). Ela serve como o *baseline* de tempo e confiança estatística do nosso algoritmo.
-- `src/multithread/` e `include/multithread/`: É o ambiente principal de desenvolvimento atual. Aqui a paralelização é aplicada (usando partições de chunks, mutexes ou thread-pools) para dividir as leituras e escritas entre múltiplos núcleos de processamento.
-- `resultados_perf/`: Diretório que armazena os relatórios de compilação gerados pelo comando Perf. Possui subpastas (`seq/` e `mt/`) para que possamos comparar lado a lado o ganho de ciclos da versão Multithread contra a versão Sequencial.
+---
 
 ## Como Executar
 
-Este projeto utiliza um **Makefile** para facilitar a compilação, execução rápida e o *profiling* com a ferramenta `perf`.
+O projeto usa um **Makefile** que centraliza compilação, execução e profiling.
 
-Por padrão, a execução rápida usa um dataset de testes menor (`data/dataset_raw.csv`), para agilizar verificações de código. Você pode sempre especificar qual arquivo quer rodar passando a variável `DATASET`.
+O dataset padrão é `data/dataset_raw.csv`. Use a variável `DATASET` para especificar outro arquivo.
 
-### 1. Execução Rápida (Sem Profiling de Hardware)
-Ideal para testar se o código compila e não dá erro, mensurando apenas o tempo de relógio:
+### Execução Simples (sem profiling)
 
 ```bash
-# Executa a versão Sequencial (com o dataset padrão)
+# Versão Sequencial
 make run_seq
 
-# Executa a versão Multithread (com o dataset padrão)
+# Versão Multithread
 make run_mt
 
-# Para especificar um arquivo gigante de 4GB:
-make run_seq DATASET=data/02-20-2018.csv
+# Com dataset específico
+make run_mt DATASET=data/02-20-2018.csv
 ```
 
-### 2. Gerar Relatórios de Performance (Com `perf`)
-Use isso caso você esteja num ambiente Linux suportado e queira mapear instruções de CPU, falhas de cache L1/L3, etc. *Nota: Pode exigir permissão de superusuário ou a configuração sysctl `kernel.perf_event_paranoid`.*
+### Profiling Completo (perf + FlameGraph)
+
+Gera **3 artefatos** por versão em uma única chamada:
+- `perf_stat.txt` — métricas de hardware (ciclos, cache misses, page-faults)
+- `perf_functions.txt` — hotspots por função (callgraph)
+- `flamegraph.svg` — visualização interativa; abra no navegador
 
 ```bash
-# Gera relatórios detalhados para o algoritmo base
+# Profiling da versão Sequencial
 make profile_seq DATASET=data/02-20-2018.csv
 
-# Gera relatórios detalhados para o algoritmo multithread
+# Profiling da versão Multithread
 make profile_mt DATASET=data/02-20-2018.csv
+
+# Profiling das duas versões em sequência
+make profile DATASET=data/02-20-2018.csv
 ```
 
-*Os relatórios serão salvos dentro de `resultados_perf/seq/` ou `resultados_perf/mt/`, incluindo o `perf_stat.txt` (métricas de hardware bruto) e o `perf_functions.txt` (análise temporal de cada função chamada).*
+> **Nota:** O `perf` requer Linux e pode precisar de `sudo sysctl kernel.perf_event_paranoid=1`.  
+> O **FlameGraph** é clonado automaticamente de [brendangregg/FlameGraph](https://github.com/brendangregg/FlameGraph) na primeira execução de `profile_*`. A pasta `tools/` está no `.gitignore`.
+
+### Limpeza
+
+```bash
+make clean   # Remove build/ e resultados_perf/*
+```
+
+---
+
+## Análise de Gargalos (Perf)
+
+Os principais gargalos identificados via `perf report` são:
+
+| Gargalo | Versão Afetada | % CPU | Causa |
+|---|---|---|---|
+| Hash lookup no `unordered_map` | Ambas | 10–22% | Linked list fragmentada na heap → L1 cache miss |
+| `nth_element` (mediana/IQR) | Ambas | ~21% | Vetor de floats (~20MB) > Cache L3 (~12MB) |
+| Contenção no controlador de RAM | Multithread | IPC 1.55 | Múltiplos threads disputando largura de banda |
+
+**IPC (Instructions Per Cycle):**
+- Sequencial: **2.10** — pipeline eficiente, memória previsível
+- Multithread: **1.55** — contenção de memória, mas paralelismo compensa
+
+O speedup real de ~4× com eficiência paralela de **~80%** é considerado excelente para workloads com essa intensidade de acesso à memória.
