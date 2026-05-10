@@ -1,0 +1,28 @@
+# started on Sun May  3 21:36:36 2026
+
+
+ Performance counter stats for './build/main_mt':
+
+         31.538,54 msec task-clock:u                                                          
+         2.989.522      page-faults:u                                                         
+    21.896.049.230      cpu_atom/branches/u                                                     (2,46%)
+    40.725.232.581      cpu_core/branches/u                                                     (97,54%)
+       270.757.411      cpu_atom/branch-misses/u                                                (2,46%)
+       780.445.340      cpu_core/branch-misses/u                                                (97,54%)
+    99.047.687.172      cpu_atom/instructions/u                                                 (2,46%)
+   190.595.036.226      cpu_core/instructions/u                                                 (97,54%)
+    51.861.991.666      cpu_atom/cycles/u                                                       (2,46%)
+    91.532.748.296      cpu_core/cycles/u                                                       (97,54%)
+   <not supported>      cpu_atom/L1-dcache-load-misses/u                                      
+       320.650.776      cpu_core/L1-dcache-load-misses/u                                        (97,54%)
+       116.578.951      cpu_atom/LLC-loads/u                                                    (2,46%)
+       146.798.700      cpu_core/LLC-loads/u                                                    (97,54%)
+        17.781.870      cpu_atom/LLC-load-misses/u                                              (2,46%)
+       105.604.804      cpu_core/LLC-load-misses/u                                              (97,54%)
+
+      55,260373037 seconds time elapsed
+
+      26,817133000 seconds user
+       4,675699000 seconds sys
+
+

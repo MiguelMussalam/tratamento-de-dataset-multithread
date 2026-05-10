@@ -6,10 +6,12 @@
 #include <math.h>
 #include <algorithm>
 #include <iomanip>
+#include <omp.h>
 
 Dataset::Dataset(const char *caminho){
   lerArquivo(caminho);  // Segunda passagem: processa com pré-alocação
   
+  #pragma omp parallel for schedule(dynamic)
   for(size_t i = 0; i < num_colunas; i++){
     if(colunas[i].tipo == NUMERICA){
       rotina_coluna_numerica(i);

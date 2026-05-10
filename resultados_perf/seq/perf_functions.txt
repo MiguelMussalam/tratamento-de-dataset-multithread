@@ -1,0 +1,1877 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 3  of event 'task-clock:u'
+# Event count (approx.): 750000
+#
+# Children      Self  Command   Shared Object         Symbol                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+# ........  ........  ........  ....................  .................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+#
+    66.67%     0.00%  main_seq  main_seq              [.] _start
+            |
+            ---_start
+               __libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               |          
+               |--33.33%--Dataset::lerArquivo(char const*)
+               |          std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+               |          
+                --33.33%--Dataset::rotina_coluna_numerica(unsigned long)
+                          void std::nth_element<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >)
+
+    66.67%     0.00%  main_seq  libc.so.6             [.] __libc_start_main@@GLIBC_2.34
+            |
+            ---__libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               |          
+               |--33.33%--Dataset::lerArquivo(char const*)
+               |          std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+               |          
+                --33.33%--Dataset::rotina_coluna_numerica(unsigned long)
+                          void std::nth_element<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >)
+
+    66.67%     0.00%  main_seq  libc.so.6             [.] __libc_start_call_main
+            |
+            ---__libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               |          
+               |--33.33%--Dataset::lerArquivo(char const*)
+               |          std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+               |          
+                --33.33%--Dataset::rotina_coluna_numerica(unsigned long)
+                          void std::nth_element<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >)
+
+    66.67%     0.00%  main_seq  main_seq              [.] main
+            |
+            ---main
+               Dataset::Dataset(char const*)
+               |          
+               |--33.33%--Dataset::lerArquivo(char const*)
+               |          std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+               |          
+                --33.33%--Dataset::rotina_coluna_numerica(unsigned long)
+                          void std::nth_element<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >)
+
+    66.67%     0.00%  main_seq  main_seq              [.] Dataset::Dataset(char const*)
+            |
+            ---Dataset::Dataset(char const*)
+               |          
+               |--33.33%--Dataset::lerArquivo(char const*)
+               |          std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+               |          
+                --33.33%--Dataset::rotina_coluna_numerica(unsigned long)
+                          void std::nth_element<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >)
+
+    33.33%    33.33%  main_seq  ld-linux-x86-64.so.2  [.] check_match
+            |
+            ---_dl_start_user
+               _dl_start
+               _dl_sysdep_start
+               dl_main
+               _dl_relocate_object
+               _dl_relocate_object_no_relro
+               _dl_lookup_symbol_x
+               do_lookup_x
+               check_match
+
+    33.33%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_start_user
+            |
+            ---_dl_start_user
+               _dl_start
+               _dl_sysdep_start
+               dl_main
+               _dl_relocate_object
+               _dl_relocate_object_no_relro
+               _dl_lookup_symbol_x
+               do_lookup_x
+               check_match
+
+    33.33%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_start
+            |
+            ---_dl_start
+               _dl_sysdep_start
+               dl_main
+               _dl_relocate_object
+               _dl_relocate_object_no_relro
+               _dl_lookup_symbol_x
+               do_lookup_x
+               check_match
+
+    33.33%    33.33%  main_seq  main_seq              [.] std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+            |
+            ---_start
+               __libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               Dataset::lerArquivo(char const*)
+               std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+
+    33.33%    33.33%  main_seq  main_seq              [.] void std::nth_element<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >)
+            |
+            ---_start
+               __libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               Dataset::rotina_coluna_numerica(unsigned long)
+               void std::nth_element<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >)
+
+    33.33%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_sysdep_start
+            |
+            ---_dl_sysdep_start
+               dl_main
+               _dl_relocate_object
+               _dl_relocate_object_no_relro
+               _dl_lookup_symbol_x
+               do_lookup_x
+               check_match
+
+    33.33%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] dl_main
+            |
+            ---dl_main
+               _dl_relocate_object
+               _dl_relocate_object_no_relro
+               _dl_lookup_symbol_x
+               do_lookup_x
+               check_match
+
+    33.33%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_relocate_object
+            |
+            ---_dl_relocate_object
+               _dl_relocate_object_no_relro
+               _dl_lookup_symbol_x
+               do_lookup_x
+               check_match
+
+    33.33%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_relocate_object_no_relro
+            |
+            ---_dl_relocate_object_no_relro
+               _dl_lookup_symbol_x
+               do_lookup_x
+               check_match
+
+    33.33%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_lookup_symbol_x
+            |
+            ---_dl_lookup_symbol_x
+               do_lookup_x
+               check_match
+
+    33.33%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] do_lookup_x
+            |
+            ---do_lookup_x
+               check_match
+
+    33.33%     0.00%  main_seq  main_seq              [.] Dataset::lerArquivo(char const*)
+            |
+            ---Dataset::lerArquivo(char const*)
+               std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+
+    33.33%     0.00%  main_seq  main_seq              [.] Dataset::rotina_coluna_numerica(unsigned long)
+            |
+            ---Dataset::rotina_coluna_numerica(unsigned long)
+               void std::nth_element<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >)
+
+
+
+# Samples: 17  of event 'page-faults:u'
+# Event count (approx.): 691
+#
+# Children      Self  Command   Shared Object         Symbol                                                                          
+# ........  ........  ........  ....................  ................................................................................
+#
+    94.65%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_start_user
+            |
+            ---_dl_start_user
+               _dl_start
+               |          
+                --93.49%--_dl_sysdep_start
+                          dl_main
+                          |          
+                          |--74.96%--__libc_early_init
+                          |          __sysconf
+                          |          
+                           --7.53%--_dl_relocate_object
+                                     |          
+                                     |--6.80%--__x86_cacheinfo_ifunc
+                                     |          
+                                      --0.72%--_dl_relocate_object_no_relro
+
+    94.65%     1.16%  main_seq  ld-linux-x86-64.so.2  [.] _dl_start
+            |          
+            |--93.49%--_dl_start
+            |          _dl_sysdep_start
+            |          dl_main
+            |          |          
+            |          |--74.96%--__libc_early_init
+            |          |          __sysconf
+            |          |          
+            |           --7.53%--_dl_relocate_object
+            |                     |          
+            |                     |--6.80%--__x86_cacheinfo_ifunc
+            |                     |          
+            |                      --0.72%--_dl_relocate_object_no_relro
+            |          
+             --1.16%--_dl_start_user
+                       _dl_start
+
+    93.49%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_sysdep_start
+            |
+            ---_dl_sysdep_start
+               dl_main
+               |          
+               |--74.96%--__libc_early_init
+               |          __sysconf
+               |          
+                --7.53%--_dl_relocate_object
+                          |          
+                          |--6.80%--__x86_cacheinfo_ifunc
+                          |          
+                           --0.72%--_dl_relocate_object_no_relro
+
+    93.49%    10.56%  main_seq  ld-linux-x86-64.so.2  [.] dl_main
+            |          
+            |--82.92%--dl_main
+            |          |          
+            |          |--74.96%--__libc_early_init
+            |          |          __sysconf
+            |          |          
+            |           --7.53%--_dl_relocate_object
+            |                     |          
+            |                     |--6.80%--__x86_cacheinfo_ifunc
+            |                     |          
+            |                      --0.72%--_dl_relocate_object_no_relro
+            |          
+             --10.56%--_dl_start_user
+                       _dl_start
+                       _dl_sysdep_start
+                       dl_main
+
+    74.96%    74.96%  main_seq  libc.so.6             [.] __sysconf
+            |
+            ---_dl_start_user
+               _dl_start
+               _dl_sysdep_start
+               dl_main
+               __libc_early_init
+               __sysconf
+
+    74.96%     0.00%  main_seq  libc.so.6             [.] __libc_early_init
+            |
+            ---__libc_early_init
+               __sysconf
+
+     7.53%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_relocate_object
+            |
+            ---_dl_relocate_object
+               |          
+               |--6.80%--__x86_cacheinfo_ifunc
+               |          
+                --0.72%--_dl_relocate_object_no_relro
+
+     6.80%     6.80%  main_seq  libc.so.6             [.] __x86_cacheinfo_ifunc
+            |
+            ---_dl_start_user
+               _dl_start
+               _dl_sysdep_start
+               dl_main
+               _dl_relocate_object
+               __x86_cacheinfo_ifunc
+
+     3.76%     3.76%  main_seq  libc.so.6             [.] __printf_buffer
+            |
+            ---std::__convert_from_v(__locale_struct* const&, char*, int, char const*, ...)
+               __printf_buffer
+
+     3.76%     0.00%  main_seq  libstdc++.so.6.0.35   [.] std::__convert_from_v(__locale_struct* const&, char*, int, char const*, ...)
+            |
+            ---std::__convert_from_v(__locale_struct* const&, char*, int, char const*, ...)
+               __printf_buffer
+
+     1.45%     1.45%  main_seq  main_seq              [.] Dataset::lerArquivo(char const*)
+            |
+            ---_start
+               __libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               Dataset::lerArquivo(char const*)
+
+     1.45%     0.00%  main_seq  main_seq              [.] _start
+            |
+            ---_start
+               __libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               Dataset::lerArquivo(char const*)
+
+     1.45%     0.00%  main_seq  libc.so.6             [.] __libc_start_main@@GLIBC_2.34
+            |
+            ---__libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               Dataset::lerArquivo(char const*)
+
+     1.45%     0.00%  main_seq  libc.so.6             [.] __libc_start_call_main
+            |
+            ---__libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               Dataset::lerArquivo(char const*)
+
+     1.45%     0.00%  main_seq  main_seq              [.] main
+            |
+            ---main
+               Dataset::Dataset(char const*)
+               Dataset::lerArquivo(char const*)
+
+     1.45%     0.00%  main_seq  main_seq              [.] Dataset::Dataset(char const*)
+            |
+            ---Dataset::Dataset(char const*)
+               Dataset::lerArquivo(char const*)
+
+     0.72%     0.72%  main_seq  ld-linux-x86-64.so.2  [.] _dl_relocate_object_no_relro
+            |
+            ---_dl_start_user
+               _dl_start
+               _dl_sysdep_start
+               dl_main
+               _dl_relocate_object
+               _dl_relocate_object_no_relro
+
+     0.29%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] init_tls
+     0.14%     0.14%  main_seq  ld-linux-x86-64.so.2  [.] _dl_check_map_versions
+     0.14%     0.14%  main_seq  ld-linux-x86-64.so.2  [.] allocate_dtv
+     0.14%     0.14%  main_seq  ld-linux-x86-64.so.2  [.] memset
+     0.14%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_receive_error
+     0.14%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] version_check_doit
+     0.14%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_allocate_tls_storage
+     0.14%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_check_all_versions
+     0.14%     0.14%  main_seq  ld-linux-x86-64.so.2  [.] _start
+
+
+# Samples: 14  of event 'cpu_core/branches/u'
+# Event count (approx.): 1950664
+#
+# Children      Self  Command   Shared Object         Symbol                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+# ........  ........  ........  ....................  .................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+#
+    78.50%     0.00%  main_seq  main_seq              [.] _start
+            |
+            ---_start
+               __libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               |          
+               |--55.50%--Dataset::Dataset(char const*)
+               |          |          
+               |          |--53.90%--Dataset::lerArquivo(char const*)
+               |          |          Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               |          |          |          
+               |          |          |--31.91%--__memcmp_avx2_movbe
+               |          |          |          
+               |          |          |--13.45%--std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+               |          |          |          
+               |          |           --8.54%--std::_Hash_bytes(void const*, unsigned long, unsigned long)
+               |          |          
+               |           --1.60%--std::from_chars(char const*, char const*, double&, std::chars_format)@plt
+               |          
+                --23.00%--std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)
+
+    78.50%     0.00%  main_seq  libc.so.6             [.] __libc_start_main@@GLIBC_2.34
+            |
+            ---__libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               |          
+               |--55.50%--Dataset::Dataset(char const*)
+               |          |          
+               |          |--53.90%--Dataset::lerArquivo(char const*)
+               |          |          Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               |          |          |          
+               |          |          |--31.91%--__memcmp_avx2_movbe
+               |          |          |          
+               |          |          |--13.45%--std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+               |          |          |          
+               |          |           --8.54%--std::_Hash_bytes(void const*, unsigned long, unsigned long)
+               |          |          
+               |           --1.60%--std::from_chars(char const*, char const*, double&, std::chars_format)@plt
+               |          
+                --23.00%--std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)
+
+    78.50%     0.00%  main_seq  libc.so.6             [.] __libc_start_call_main
+            |
+            ---__libc_start_call_main
+               main
+               |          
+               |--55.50%--Dataset::Dataset(char const*)
+               |          |          
+               |          |--53.90%--Dataset::lerArquivo(char const*)
+               |          |          Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               |          |          |          
+               |          |          |--31.91%--__memcmp_avx2_movbe
+               |          |          |          
+               |          |          |--13.45%--std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+               |          |          |          
+               |          |           --8.54%--std::_Hash_bytes(void const*, unsigned long, unsigned long)
+               |          |          
+               |           --1.60%--std::from_chars(char const*, char const*, double&, std::chars_format)@plt
+               |          
+                --23.00%--std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)
+
+    78.50%     0.00%  main_seq  main_seq              [.] main
+            |
+            ---main
+               |          
+               |--55.50%--Dataset::Dataset(char const*)
+               |          |          
+               |          |--53.90%--Dataset::lerArquivo(char const*)
+               |          |          Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               |          |          |          
+               |          |          |--31.91%--__memcmp_avx2_movbe
+               |          |          |          
+               |          |          |--13.45%--std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+               |          |          |          
+               |          |           --8.54%--std::_Hash_bytes(void const*, unsigned long, unsigned long)
+               |          |          
+               |           --1.60%--std::from_chars(char const*, char const*, double&, std::chars_format)@plt
+               |          
+                --23.00%--std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)
+
+    55.50%     0.00%  main_seq  main_seq              [.] Dataset::Dataset(char const*)
+            |
+            ---Dataset::Dataset(char const*)
+               |          
+               |--53.90%--Dataset::lerArquivo(char const*)
+               |          Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               |          |          
+               |          |--31.91%--__memcmp_avx2_movbe
+               |          |          
+               |          |--13.45%--std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+               |          |          
+               |           --8.54%--std::_Hash_bytes(void const*, unsigned long, unsigned long)
+               |          
+                --1.60%--std::from_chars(char const*, char const*, double&, std::chars_format)@plt
+
+    53.90%     0.00%  main_seq  main_seq              [.] Dataset::lerArquivo(char const*)
+            |
+            ---Dataset::lerArquivo(char const*)
+               Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               |          
+               |--31.91%--__memcmp_avx2_movbe
+               |          
+               |--13.45%--std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+               |          
+                --8.54%--std::_Hash_bytes(void const*, unsigned long, unsigned long)
+
+    53.90%     0.00%  main_seq  main_seq              [.] Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+            |
+            ---Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               |          
+               |--31.91%--__memcmp_avx2_movbe
+               |          
+               |--13.45%--std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+               |          
+                --8.54%--std::_Hash_bytes(void const*, unsigned long, unsigned long)
+
+    31.91%    31.91%  main_seq  libc.so.6             [.] __memcmp_avx2_movbe
+            |
+            ---_start
+               __libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               Dataset::lerArquivo(char const*)
+               Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               __memcmp_avx2_movbe
+
+    23.00%    23.00%  main_seq  libstdc++.so.6.0.35   [.] std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)
+            |
+            ---_start
+               __libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)
+
+    21.50%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_start_user
+            |
+            ---_dl_start_user
+               _dl_start
+               _dl_sysdep_start
+               dl_main
+               _dl_relocate_object
+               _dl_relocate_object_no_relro
+               |          
+                --17.48%--_dl_lookup_symbol_x
+                          |          
+                           --12.56%--do_lookup_x
+
+    21.50%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_start
+            |
+            ---_dl_start
+               _dl_sysdep_start
+               dl_main
+               _dl_relocate_object
+               _dl_relocate_object_no_relro
+               |          
+                --17.48%--_dl_lookup_symbol_x
+                          |          
+                           --12.56%--do_lookup_x
+
+    21.50%     4.02%  main_seq  ld-linux-x86-64.so.2  [.] _dl_relocate_object_no_relro
+            |          
+            |--17.48%--_dl_relocate_object_no_relro
+            |          _dl_lookup_symbol_x
+            |          |          
+            |           --12.56%--do_lookup_x
+            |          
+             --4.02%--_dl_start_user
+                       _dl_start
+                       _dl_sysdep_start
+                       dl_main
+                       _dl_relocate_object
+                       _dl_relocate_object_no_relro
+
+    21.50%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_sysdep_start
+            |
+            ---_dl_sysdep_start
+               dl_main
+               _dl_relocate_object
+               _dl_relocate_object_no_relro
+               |          
+                --17.48%--_dl_lookup_symbol_x
+                          |          
+                           --12.56%--do_lookup_x
+
+    21.50%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] dl_main
+            |
+            ---dl_main
+               _dl_relocate_object
+               _dl_relocate_object_no_relro
+               |          
+                --17.48%--_dl_lookup_symbol_x
+                          |          
+                           --12.56%--do_lookup_x
+
+    21.50%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_relocate_object
+            |
+            ---_dl_relocate_object
+               _dl_relocate_object_no_relro
+               |          
+                --17.48%--_dl_lookup_symbol_x
+                          |          
+                           --12.56%--do_lookup_x
+
+    17.48%     4.92%  main_seq  ld-linux-x86-64.so.2  [.] _dl_lookup_symbol_x
+            |          
+            |--12.56%--_dl_lookup_symbol_x
+            |          do_lookup_x
+            |          
+             --4.92%--_dl_start_user
+                       _dl_start
+                       _dl_sysdep_start
+                       dl_main
+                       _dl_relocate_object
+                       _dl_relocate_object_no_relro
+                       _dl_lookup_symbol_x
+
+    13.45%    13.45%  main_seq  main_seq              [.] std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+            |
+            ---_start
+               __libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               Dataset::lerArquivo(char const*)
+               Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+
+    12.56%    12.56%  main_seq  ld-linux-x86-64.so.2  [.] do_lookup_x
+            |
+            ---_dl_start_user
+               _dl_start
+               _dl_sysdep_start
+               dl_main
+               _dl_relocate_object
+               _dl_relocate_object_no_relro
+               _dl_lookup_symbol_x
+               do_lookup_x
+
+     8.54%     8.54%  main_seq  libstdc++.so.6.0.35   [.] std::_Hash_bytes(void const*, unsigned long, unsigned long)
+            |
+            ---_start
+               __libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               Dataset::lerArquivo(char const*)
+               Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               std::_Hash_bytes(void const*, unsigned long, unsigned long)
+
+     1.60%     1.60%  main_seq  main_seq              [.] std::from_chars(char const*, char const*, double&, std::chars_format)@plt
+            |
+            ---_start
+               __libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               std::from_chars(char const*, char const*, double&, std::chars_format)@plt
+
+
+
+# Samples: 4  of event 'cpu_atom/branch-misses/u'
+# Event count (approx.): 1020
+#
+# Children      Self  Command   Shared Object         Symbol                  
+# ........  ........  ........  ....................  ........................
+#
+   100.00%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_start_user
+            |
+            ---_dl_start_user
+               _dl_start
+               _dl_sysdep_start
+               |          
+               |--81.47%--dl_main
+               |          _dl_map_object_deps
+               |          _dl_catch_exception
+               |          openaux
+               |          _dl_map_object
+               |          _dl_lookup_map
+               |          _dl_name_match_p
+               |          
+                --18.53%--__GI___tunables_init
+
+   100.00%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_start
+            |
+            ---_dl_start
+               _dl_sysdep_start
+               |          
+               |--81.47%--dl_main
+               |          _dl_map_object_deps
+               |          _dl_catch_exception
+               |          openaux
+               |          _dl_map_object
+               |          _dl_lookup_map
+               |          _dl_name_match_p
+               |          
+                --18.53%--__GI___tunables_init
+
+   100.00%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_sysdep_start
+            |
+            ---_dl_sysdep_start
+               |          
+               |--81.47%--dl_main
+               |          _dl_map_object_deps
+               |          _dl_catch_exception
+               |          openaux
+               |          _dl_map_object
+               |          _dl_lookup_map
+               |          _dl_name_match_p
+               |          
+                --18.53%--__GI___tunables_init
+
+    81.47%    81.47%  main_seq  ld-linux-x86-64.so.2  [.] _dl_name_match_p
+            |
+            ---_dl_start_user
+               _dl_start
+               _dl_sysdep_start
+               dl_main
+               _dl_map_object_deps
+               _dl_catch_exception
+               openaux
+               _dl_map_object
+               _dl_lookup_map
+               _dl_name_match_p
+
+    81.47%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] dl_main
+            |
+            ---dl_main
+               _dl_map_object_deps
+               _dl_catch_exception
+               openaux
+               _dl_map_object
+               _dl_lookup_map
+               _dl_name_match_p
+
+    81.47%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_map_object_deps
+            |
+            ---_dl_map_object_deps
+               _dl_catch_exception
+               openaux
+               _dl_map_object
+               _dl_lookup_map
+               _dl_name_match_p
+
+    81.47%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_catch_exception
+            |
+            ---_dl_catch_exception
+               openaux
+               _dl_map_object
+               _dl_lookup_map
+               _dl_name_match_p
+
+    81.47%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] openaux
+            |
+            ---openaux
+               _dl_map_object
+               _dl_lookup_map
+               _dl_name_match_p
+
+    81.47%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_map_object
+            |
+            ---_dl_map_object
+               _dl_lookup_map
+               _dl_name_match_p
+
+    81.47%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_lookup_map
+            |
+            ---_dl_lookup_map
+               _dl_name_match_p
+
+    18.53%    18.53%  main_seq  ld-linux-x86-64.so.2  [.] __GI___tunables_init
+            |
+            ---_dl_start_user
+               _dl_start
+               _dl_sysdep_start
+               __GI___tunables_init
+
+
+
+# Samples: 12  of event 'cpu_core/branch-misses/u'
+# Event count (approx.): 18717
+#
+# Children      Self  Command   Shared Object         Symbol                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+# ........  ........  ........  ....................  .................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+#
+    60.13%     0.00%  main_seq  main_seq              [.] _start
+            |
+            ---_start
+               __libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               |          
+               |--53.08%--Dataset::lerArquivo(char const*)
+               |          |          
+               |          |--28.13%--std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+               |          |          
+               |           --24.95%--Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               |                     |          
+               |                      --24.61%--operator new(unsigned long)
+               |                                __libc_malloc2
+               |                                _int_malloc
+               |          
+                --7.05%--std::from_chars(char const*, char const*, double&, std::chars_format)
+
+    60.13%     0.00%  main_seq  libc.so.6             [.] __libc_start_main@@GLIBC_2.34
+            |
+            ---__libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               |          
+               |--53.08%--Dataset::lerArquivo(char const*)
+               |          |          
+               |          |--28.13%--std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+               |          |          
+               |           --24.95%--Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               |                     |          
+               |                      --24.61%--operator new(unsigned long)
+               |                                __libc_malloc2
+               |                                _int_malloc
+               |          
+                --7.05%--std::from_chars(char const*, char const*, double&, std::chars_format)
+
+    60.13%     0.00%  main_seq  libc.so.6             [.] __libc_start_call_main
+            |
+            ---__libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               |          
+               |--53.08%--Dataset::lerArquivo(char const*)
+               |          |          
+               |          |--28.13%--std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+               |          |          
+               |           --24.95%--Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               |                     |          
+               |                      --24.61%--operator new(unsigned long)
+               |                                __libc_malloc2
+               |                                _int_malloc
+               |          
+                --7.05%--std::from_chars(char const*, char const*, double&, std::chars_format)
+
+    60.13%     0.00%  main_seq  main_seq              [.] main
+            |
+            ---main
+               Dataset::Dataset(char const*)
+               |          
+               |--53.08%--Dataset::lerArquivo(char const*)
+               |          |          
+               |          |--28.13%--std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+               |          |          
+               |           --24.95%--Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               |                     |          
+               |                      --24.61%--operator new(unsigned long)
+               |                                __libc_malloc2
+               |                                _int_malloc
+               |          
+                --7.05%--std::from_chars(char const*, char const*, double&, std::chars_format)
+
+    60.13%     0.00%  main_seq  main_seq              [.] Dataset::Dataset(char const*)
+            |
+            ---Dataset::Dataset(char const*)
+               |          
+               |--53.08%--Dataset::lerArquivo(char const*)
+               |          |          
+               |          |--28.13%--std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+               |          |          
+               |           --24.95%--Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               |                     |          
+               |                      --24.61%--operator new(unsigned long)
+               |                                __libc_malloc2
+               |                                _int_malloc
+               |          
+                --7.05%--std::from_chars(char const*, char const*, double&, std::chars_format)
+
+    53.08%     0.00%  main_seq  main_seq              [.] Dataset::lerArquivo(char const*)
+            |
+            ---Dataset::lerArquivo(char const*)
+               |          
+               |--28.13%--std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+               |          
+                --24.95%--Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+                          |          
+                           --24.61%--operator new(unsigned long)
+                                     __libc_malloc2
+                                     _int_malloc
+
+    39.54%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_start_user
+            |
+            ---_dl_start_user
+               _dl_start
+               _dl_sysdep_start
+               dl_main
+               |          
+               |--38.53%--_dl_relocate_object
+               |          _dl_relocate_object_no_relro
+               |          _dl_lookup_symbol_x
+               |          |          
+               |           --34.31%--do_lookup_x
+               |                     |          
+               |                      --12.25%--check_match
+               |          
+                --1.01%--_dl_receive_error
+                          version_check_doit
+                          _dl_check_all_versions
+                          |          
+                           --0.67%--_dl_check_map_versions
+
+    39.54%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_start
+            |
+            ---_dl_start
+               _dl_sysdep_start
+               dl_main
+               |          
+               |--38.53%--_dl_relocate_object
+               |          _dl_relocate_object_no_relro
+               |          _dl_lookup_symbol_x
+               |          |          
+               |           --34.31%--do_lookup_x
+               |                     |          
+               |                      --12.25%--check_match
+               |          
+                --1.01%--_dl_receive_error
+                          version_check_doit
+                          _dl_check_all_versions
+                          |          
+                           --0.67%--_dl_check_map_versions
+
+    39.54%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_sysdep_start
+            |
+            ---_dl_sysdep_start
+               dl_main
+               |          
+               |--38.53%--_dl_relocate_object
+               |          _dl_relocate_object_no_relro
+               |          _dl_lookup_symbol_x
+               |          |          
+               |           --34.31%--do_lookup_x
+               |                     |          
+               |                      --12.25%--check_match
+               |          
+                --1.01%--_dl_receive_error
+                          version_check_doit
+                          _dl_check_all_versions
+                          |          
+                           --0.67%--_dl_check_map_versions
+
+    39.54%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] dl_main
+            |
+            ---dl_main
+               |          
+               |--38.53%--_dl_relocate_object
+               |          _dl_relocate_object_no_relro
+               |          _dl_lookup_symbol_x
+               |          |          
+               |           --34.31%--do_lookup_x
+               |                     |          
+               |                      --12.25%--check_match
+               |          
+                --1.01%--_dl_receive_error
+                          version_check_doit
+                          _dl_check_all_versions
+                          |          
+                           --0.67%--_dl_check_map_versions
+
+    38.53%     4.22%  main_seq  ld-linux-x86-64.so.2  [.] _dl_lookup_symbol_x
+            |          
+            |--34.31%--_dl_lookup_symbol_x
+            |          do_lookup_x
+            |          |          
+            |           --12.25%--check_match
+            |          
+             --4.22%--_dl_start_user
+                       _dl_start
+                       _dl_sysdep_start
+                       dl_main
+                       _dl_relocate_object
+                       _dl_relocate_object_no_relro
+                       _dl_lookup_symbol_x
+
+    38.53%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_relocate_object
+            |
+            ---_dl_relocate_object
+               _dl_relocate_object_no_relro
+               _dl_lookup_symbol_x
+               |          
+                --34.31%--do_lookup_x
+                          |          
+                           --12.25%--check_match
+
+    38.53%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_relocate_object_no_relro
+            |
+            ---_dl_relocate_object_no_relro
+               _dl_lookup_symbol_x
+               |          
+                --34.31%--do_lookup_x
+                          |          
+                           --12.25%--check_match
+
+    34.31%    22.07%  main_seq  ld-linux-x86-64.so.2  [.] do_lookup_x
+            |          
+            |--22.07%--_dl_start_user
+            |          _dl_start
+            |          _dl_sysdep_start
+            |          dl_main
+            |          _dl_relocate_object
+            |          _dl_relocate_object_no_relro
+            |          _dl_lookup_symbol_x
+            |          do_lookup_x
+            |          
+             --12.25%--do_lookup_x
+                       check_match
+
+    28.13%    28.13%  main_seq  main_seq              [.] std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+            |
+            ---_start
+               __libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               Dataset::lerArquivo(char const*)
+               std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+
+    24.95%     0.00%  main_seq  main_seq              [.] Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+            |
+            ---Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               |          
+                --24.61%--operator new(unsigned long)
+                          __libc_malloc2
+                          _int_malloc
+
+    24.61%    24.61%  main_seq  libc.so.6             [.] _int_malloc
+            |
+            ---_start
+               __libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               Dataset::lerArquivo(char const*)
+               Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               operator new(unsigned long)
+               __libc_malloc2
+               _int_malloc
+
+    24.61%     0.00%  main_seq  libstdc++.so.6.0.35   [.] operator new(unsigned long)
+            |
+            ---operator new(unsigned long)
+               __libc_malloc2
+               _int_malloc
+
+    24.61%     0.00%  main_seq  libc.so.6             [.] __libc_malloc2
+            |
+            ---__libc_malloc2
+               _int_malloc
+
+    12.25%    12.25%  main_seq  ld-linux-x86-64.so.2  [.] check_match
+            |
+            ---_dl_start_user
+               _dl_start
+               _dl_sysdep_start
+               dl_main
+               _dl_relocate_object
+               _dl_relocate_object_no_relro
+               _dl_lookup_symbol_x
+               do_lookup_x
+               check_match
+
+     7.38%     7.38%  main_seq  libstdc++.so.6.0.35   [.] std::from_chars(char const*, char const*, double&, std::chars_format)
+            |          
+             --7.05%--_start
+                       __libc_start_main@@GLIBC_2.34
+                       __libc_start_call_main
+                       main
+                       Dataset::Dataset(char const*)
+                       std::from_chars(char const*, char const*, double&, std::chars_format)
+
+     1.01%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_receive_error
+            |
+            ---_dl_receive_error
+               version_check_doit
+               _dl_check_all_versions
+               |          
+                --0.67%--_dl_check_map_versions
+
+     1.01%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] version_check_doit
+            |
+            ---version_check_doit
+               _dl_check_all_versions
+               |          
+                --0.67%--_dl_check_map_versions
+
+     1.01%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_check_all_versions
+            |
+            ---_dl_check_all_versions
+               |          
+                --0.67%--_dl_check_map_versions
+
+     0.67%     0.34%  main_seq  ld-linux-x86-64.so.2  [.] _dl_check_map_versions
+     0.34%     0.34%  main_seq  ld-linux-x86-64.so.2  [.] _dl_name_match_p
+     0.34%     0.34%  main_seq  ld-linux-x86-64.so.2  [.] strcmp
+     0.34%     0.34%  main_seq  libstdc++.so.6.0.35   [.] std::_Hash_bytes(void const*, unsigned long, unsigned long)
+
+
+# Samples: 5  of event 'cpu_atom/instructions/u'
+# Event count (approx.): 21631
+#
+# Children      Self  Command   Shared Object         Symbol                           
+# ........  ........  ........  ....................  .................................
+#
+   100.00%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_start_user
+            |
+            ---_dl_start_user
+               _dl_start
+               |          
+                --99.13%--_dl_sysdep_start
+                          |          
+                          |--94.89%--init_cpu_features.constprop.0
+                          |          update_active.constprop.0
+                          |          
+                           --4.24%--_dl_sysdep_parse_arguments
+
+   100.00%     0.87%  main_seq  ld-linux-x86-64.so.2  [.] _dl_start
+            |          
+            |--99.13%--_dl_start
+            |          _dl_sysdep_start
+            |          |          
+            |          |--94.89%--init_cpu_features.constprop.0
+            |          |          update_active.constprop.0
+            |          |          
+            |           --4.24%--_dl_sysdep_parse_arguments
+            |          
+             --0.87%--_dl_start_user
+                       _dl_start
+
+    99.13%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_sysdep_start
+            |
+            ---_dl_sysdep_start
+               |          
+               |--94.89%--init_cpu_features.constprop.0
+               |          update_active.constprop.0
+               |          
+                --4.24%--_dl_sysdep_parse_arguments
+
+    94.89%    94.89%  main_seq  ld-linux-x86-64.so.2  [.] update_active.constprop.0
+            |
+            ---_dl_start_user
+               _dl_start
+               _dl_sysdep_start
+               init_cpu_features.constprop.0
+               update_active.constprop.0
+
+    94.89%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] init_cpu_features.constprop.0
+            |
+            ---init_cpu_features.constprop.0
+               update_active.constprop.0
+
+     4.24%     4.24%  main_seq  ld-linux-x86-64.so.2  [.] _dl_sysdep_parse_arguments
+            |
+            ---_dl_start_user
+               _dl_start
+               _dl_sysdep_start
+               _dl_sysdep_parse_arguments
+
+
+
+# Samples: 19  of event 'cpu_core/instructions/u'
+# Event count (approx.): 8869238
+#
+# Children      Self  Command   Shared Object         Symbol                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+# ........  ........  ........  ....................  .................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+#
+    59.52%     0.00%  main_seq  main_seq              [.] _start
+            |
+            ---_start
+               __libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               |          
+               |--35.09%--Dataset::lerArquivo(char const*)
+               |          |          
+               |           --19.62%--Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               |                     |          
+               |                      --19.62%--std::_Hash_bytes(void const*, unsigned long, unsigned long)
+               |          
+                --24.26%--Dataset::rotina_coluna_numerica(unsigned long)
+                          void std::nth_element<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >)
+
+    59.52%     0.00%  main_seq  libc.so.6             [.] __libc_start_main@@GLIBC_2.34
+            |
+            ---__libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               |          
+               |--35.09%--Dataset::lerArquivo(char const*)
+               |          |          
+               |           --19.62%--Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               |                     |          
+               |                      --19.62%--std::_Hash_bytes(void const*, unsigned long, unsigned long)
+               |          
+                --24.26%--Dataset::rotina_coluna_numerica(unsigned long)
+                          void std::nth_element<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >)
+
+    59.52%     0.00%  main_seq  libc.so.6             [.] __libc_start_call_main
+            |
+            ---__libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               |          
+               |--35.09%--Dataset::lerArquivo(char const*)
+               |          |          
+               |           --19.62%--Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               |                     |          
+               |                      --19.62%--std::_Hash_bytes(void const*, unsigned long, unsigned long)
+               |          
+                --24.26%--Dataset::rotina_coluna_numerica(unsigned long)
+                          void std::nth_element<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >)
+
+    59.52%     0.00%  main_seq  main_seq              [.] main
+            |
+            ---main
+               Dataset::Dataset(char const*)
+               |          
+               |--35.09%--Dataset::lerArquivo(char const*)
+               |          |          
+               |           --19.62%--Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               |                     |          
+               |                      --19.62%--std::_Hash_bytes(void const*, unsigned long, unsigned long)
+               |          
+                --24.26%--Dataset::rotina_coluna_numerica(unsigned long)
+                          void std::nth_element<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >)
+
+    59.52%     0.00%  main_seq  main_seq              [.] Dataset::Dataset(char const*)
+            |
+            ---Dataset::Dataset(char const*)
+               |          
+               |--35.09%--Dataset::lerArquivo(char const*)
+               |          |          
+               |           --19.62%--Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               |                     |          
+               |                      --19.62%--std::_Hash_bytes(void const*, unsigned long, unsigned long)
+               |          
+                --24.26%--Dataset::rotina_coluna_numerica(unsigned long)
+                          void std::nth_element<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >)
+
+    35.09%    15.46%  main_seq  main_seq              [.] Dataset::lerArquivo(char const*)
+            |          
+            |--19.62%--Dataset::lerArquivo(char const*)
+            |          Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+            |          |          
+            |           --19.62%--std::_Hash_bytes(void const*, unsigned long, unsigned long)
+            |          
+             --15.46%--_start
+                       __libc_start_main@@GLIBC_2.34
+                       __libc_start_call_main
+                       main
+                       Dataset::Dataset(char const*)
+                       Dataset::lerArquivo(char const*)
+
+    27.49%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_start_user
+            |
+            ---_dl_start_user
+               _dl_start
+               _dl_sysdep_start
+               dl_main
+               |          
+                --27.36%--_dl_relocate_object
+                          _dl_relocate_object_no_relro
+                          |          
+                           --24.43%--_dl_lookup_symbol_x
+                                     |          
+                                      --9.94%--do_lookup_x
+
+    27.49%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_start
+            |
+            ---_dl_start
+               _dl_sysdep_start
+               dl_main
+               |          
+                --27.36%--_dl_relocate_object
+                          _dl_relocate_object_no_relro
+                          |          
+                           --24.43%--_dl_lookup_symbol_x
+                                     |          
+                                      --9.94%--do_lookup_x
+
+    27.49%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_sysdep_start
+            |
+            ---_dl_sysdep_start
+               dl_main
+               |          
+                --27.36%--_dl_relocate_object
+                          _dl_relocate_object_no_relro
+                          |          
+                           --24.43%--_dl_lookup_symbol_x
+                                     |          
+                                      --9.94%--do_lookup_x
+
+    27.49%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] dl_main
+            |
+            ---dl_main
+               |          
+                --27.36%--_dl_relocate_object
+                          _dl_relocate_object_no_relro
+                          |          
+                           --24.43%--_dl_lookup_symbol_x
+                                     |          
+                                      --9.94%--do_lookup_x
+
+    27.36%     2.94%  main_seq  ld-linux-x86-64.so.2  [.] _dl_relocate_object_no_relro
+            |          
+            |--24.43%--_dl_relocate_object_no_relro
+            |          _dl_lookup_symbol_x
+            |          |          
+            |           --9.94%--do_lookup_x
+            |          
+             --2.94%--_dl_start_user
+                       _dl_start
+                       _dl_sysdep_start
+                       dl_main
+                       _dl_relocate_object
+                       _dl_relocate_object_no_relro
+
+    27.36%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_relocate_object
+            |
+            ---_dl_relocate_object
+               _dl_relocate_object_no_relro
+               |          
+                --24.43%--_dl_lookup_symbol_x
+                          |          
+                           --9.94%--do_lookup_x
+
+    24.43%    14.49%  main_seq  ld-linux-x86-64.so.2  [.] _dl_lookup_symbol_x
+            |          
+            |--14.49%--_dl_start_user
+            |          _dl_start
+            |          _dl_sysdep_start
+            |          dl_main
+            |          _dl_relocate_object
+            |          _dl_relocate_object_no_relro
+            |          _dl_lookup_symbol_x
+            |          
+             --9.94%--_dl_lookup_symbol_x
+                       do_lookup_x
+
+    24.26%    24.26%  main_seq  main_seq              [.] void std::nth_element<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >)
+            |
+            ---_start
+               __libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               Dataset::rotina_coluna_numerica(unsigned long)
+               void std::nth_element<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >)
+
+    24.26%     0.00%  main_seq  main_seq              [.] Dataset::rotina_coluna_numerica(unsigned long)
+            |
+            ---Dataset::rotina_coluna_numerica(unsigned long)
+               void std::nth_element<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >)
+
+    19.62%     0.00%  main_seq  main_seq              [.] Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+            |
+            ---Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               |          
+                --19.62%--std::_Hash_bytes(void const*, unsigned long, unsigned long)
+
+    19.62%    19.62%  main_seq  libstdc++.so.6.0.35   [.] std::_Hash_bytes(void const*, unsigned long, unsigned long)
+            |
+            ---_start
+               __libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               Dataset::lerArquivo(char const*)
+               Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               std::_Hash_bytes(void const*, unsigned long, unsigned long)
+
+    12.99%    12.99%  main_seq  libstdc++.so.6.0.35   [.] std::from_chars(char const*, char const*, double&, std::chars_format)
+            |
+            ---std::from_chars(char const*, char const*, double&, std::chars_format)
+
+     9.94%     9.94%  main_seq  ld-linux-x86-64.so.2  [.] do_lookup_x
+            |
+            ---_dl_start_user
+               _dl_start
+               _dl_sysdep_start
+               dl_main
+               _dl_relocate_object
+               _dl_relocate_object_no_relro
+               _dl_lookup_symbol_x
+               do_lookup_x
+
+     0.18%     0.18%  main_seq  libc.so.6             [.] __memchr_avx2
+     0.13%     0.01%  main_seq  ld-linux-x86-64.so.2  [.] _dl_check_map_versions
+     0.13%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_receive_error
+     0.13%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] version_check_doit
+     0.13%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_check_all_versions
+     0.12%     0.12%  main_seq  ld-linux-x86-64.so.2  [.] _dl_name_match_p
+     0.00%     0.00%  main_seq  main_seq              [.] std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+
+
+# Samples: 1  of event 'cpu_atom/cycles/u'
+# Event count (approx.): 124999
+#
+# Children      Self  Command   Shared Object         Symbol                   
+# ........  ........  ........  ....................  .........................
+#
+   100.00%   100.00%  main_seq  ld-linux-x86-64.so.2  [.] search_cache
+            |
+            ---_dl_start_user
+               _dl_start
+               _dl_sysdep_start
+               dl_main
+               _dl_map_object_deps
+               _dl_catch_exception
+               openaux
+               _dl_map_new_object
+               _dl_load_cache_lookup
+               search_cache
+
+   100.00%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_start_user
+            |
+            ---_dl_start_user
+               _dl_start
+               _dl_sysdep_start
+               dl_main
+               _dl_map_object_deps
+               _dl_catch_exception
+               openaux
+               _dl_map_new_object
+               _dl_load_cache_lookup
+               search_cache
+
+   100.00%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_start
+            |
+            ---_dl_start
+               _dl_sysdep_start
+               dl_main
+               _dl_map_object_deps
+               _dl_catch_exception
+               openaux
+               _dl_map_new_object
+               _dl_load_cache_lookup
+               search_cache
+
+   100.00%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_sysdep_start
+            |
+            ---_dl_sysdep_start
+               dl_main
+               _dl_map_object_deps
+               _dl_catch_exception
+               openaux
+               _dl_map_new_object
+               _dl_load_cache_lookup
+               search_cache
+
+   100.00%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] dl_main
+            |
+            ---dl_main
+               _dl_map_object_deps
+               _dl_catch_exception
+               openaux
+               _dl_map_new_object
+               _dl_load_cache_lookup
+               search_cache
+
+   100.00%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_map_object_deps
+            |
+            ---_dl_map_object_deps
+               _dl_catch_exception
+               openaux
+               _dl_map_new_object
+               _dl_load_cache_lookup
+               search_cache
+
+   100.00%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_catch_exception
+            |
+            ---_dl_catch_exception
+               openaux
+               _dl_map_new_object
+               _dl_load_cache_lookup
+               search_cache
+
+   100.00%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] openaux
+            |
+            ---openaux
+               _dl_map_new_object
+               _dl_load_cache_lookup
+               search_cache
+
+   100.00%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_map_new_object
+            |
+            ---_dl_map_new_object
+               _dl_load_cache_lookup
+               search_cache
+
+   100.00%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_load_cache_lookup
+            |
+            ---_dl_load_cache_lookup
+               search_cache
+
+
+
+# Samples: 13  of event 'cpu_core/cycles/u'
+# Event count (approx.): 3798552
+#
+# Children      Self  Command   Shared Object         Symbol                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+# ........  ........  ........  ....................  .................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+#
+    61.12%     0.00%  main_seq  main_seq              [.] _start
+            |
+            ---_start
+               __libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               |          
+               |--29.95%--Dataset::lerArquivo(char const*)
+               |          Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               |          |          
+               |          |--17.57%--__memcmp_avx2_movbe
+               |          |          
+               |           --12.38%--std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+               |          
+               |--20.24%--__memchr_avx2
+               |          
+                --10.93%--Dataset::rotina_coluna_numerica(unsigned long)
+                          void std::nth_element<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >)
+
+    61.12%     0.00%  main_seq  libc.so.6             [.] __libc_start_main@@GLIBC_2.34
+            |
+            ---__libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               |          
+               |--29.95%--Dataset::lerArquivo(char const*)
+               |          Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               |          |          
+               |          |--17.57%--__memcmp_avx2_movbe
+               |          |          
+               |           --12.38%--std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+               |          
+               |--20.24%--__memchr_avx2
+               |          
+                --10.93%--Dataset::rotina_coluna_numerica(unsigned long)
+                          void std::nth_element<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >)
+
+    61.12%     0.00%  main_seq  libc.so.6             [.] __libc_start_call_main
+            |
+            ---__libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               |          
+               |--29.95%--Dataset::lerArquivo(char const*)
+               |          Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               |          |          
+               |          |--17.57%--__memcmp_avx2_movbe
+               |          |          
+               |           --12.38%--std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+               |          
+               |--20.24%--__memchr_avx2
+               |          
+                --10.93%--Dataset::rotina_coluna_numerica(unsigned long)
+                          void std::nth_element<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >)
+
+    61.12%     0.00%  main_seq  main_seq              [.] main
+            |
+            ---main
+               Dataset::Dataset(char const*)
+               |          
+               |--29.95%--Dataset::lerArquivo(char const*)
+               |          Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               |          |          
+               |          |--17.57%--__memcmp_avx2_movbe
+               |          |          
+               |           --12.38%--std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+               |          
+               |--20.24%--__memchr_avx2
+               |          
+                --10.93%--Dataset::rotina_coluna_numerica(unsigned long)
+                          void std::nth_element<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >)
+
+    61.12%     0.00%  main_seq  main_seq              [.] Dataset::Dataset(char const*)
+            |
+            ---Dataset::Dataset(char const*)
+               |          
+               |--29.95%--Dataset::lerArquivo(char const*)
+               |          Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               |          |          
+               |          |--17.57%--__memcmp_avx2_movbe
+               |          |          
+               |           --12.38%--std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+               |          
+               |--20.24%--__memchr_avx2
+               |          
+                --10.93%--Dataset::rotina_coluna_numerica(unsigned long)
+                          void std::nth_element<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >)
+
+    35.59%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_start_user
+            |
+            ---_dl_start_user
+               _dl_start
+               _dl_sysdep_start
+               dl_main
+               _dl_relocate_object
+               _dl_relocate_object_no_relro
+               |          
+                --25.72%--_dl_lookup_symbol_x
+                          |          
+                           --12.37%--do_lookup_x
+
+    35.59%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_start
+            |
+            ---_dl_start
+               _dl_sysdep_start
+               dl_main
+               _dl_relocate_object
+               _dl_relocate_object_no_relro
+               |          
+                --25.72%--_dl_lookup_symbol_x
+                          |          
+                           --12.37%--do_lookup_x
+
+    35.59%     9.87%  main_seq  ld-linux-x86-64.so.2  [.] _dl_relocate_object_no_relro
+            |          
+            |--25.72%--_dl_relocate_object_no_relro
+            |          _dl_lookup_symbol_x
+            |          |          
+            |           --12.37%--do_lookup_x
+            |          
+             --9.87%--_dl_start_user
+                       _dl_start
+                       _dl_sysdep_start
+                       dl_main
+                       _dl_relocate_object
+                       _dl_relocate_object_no_relro
+
+    35.59%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_sysdep_start
+            |
+            ---_dl_sysdep_start
+               dl_main
+               _dl_relocate_object
+               _dl_relocate_object_no_relro
+               |          
+                --25.72%--_dl_lookup_symbol_x
+                          |          
+                           --12.37%--do_lookup_x
+
+    35.59%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] dl_main
+            |
+            ---dl_main
+               _dl_relocate_object
+               _dl_relocate_object_no_relro
+               |          
+                --25.72%--_dl_lookup_symbol_x
+                          |          
+                           --12.37%--do_lookup_x
+
+    35.59%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_relocate_object
+            |
+            ---_dl_relocate_object
+               _dl_relocate_object_no_relro
+               |          
+                --25.72%--_dl_lookup_symbol_x
+                          |          
+                           --12.37%--do_lookup_x
+
+    29.95%     0.00%  main_seq  main_seq              [.] Dataset::lerArquivo(char const*)
+            |
+            ---Dataset::lerArquivo(char const*)
+               Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               |          
+               |--17.57%--__memcmp_avx2_movbe
+               |          
+                --12.38%--std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+
+    29.95%     0.00%  main_seq  main_seq              [.] Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+            |
+            ---Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               |          
+               |--17.57%--__memcmp_avx2_movbe
+               |          
+                --12.38%--std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+
+    25.72%    13.35%  main_seq  ld-linux-x86-64.so.2  [.] _dl_lookup_symbol_x
+            |          
+            |--13.35%--_dl_start_user
+            |          _dl_start
+            |          _dl_sysdep_start
+            |          dl_main
+            |          _dl_relocate_object
+            |          _dl_relocate_object_no_relro
+            |          _dl_lookup_symbol_x
+            |          
+             --12.37%--_dl_lookup_symbol_x
+                       do_lookup_x
+
+    20.24%    20.24%  main_seq  libc.so.6             [.] __memchr_avx2
+            |
+            ---_start
+               __libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               __memchr_avx2
+
+    17.57%    17.57%  main_seq  libc.so.6             [.] __memcmp_avx2_movbe
+            |
+            ---_start
+               __libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               Dataset::lerArquivo(char const*)
+               Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               __memcmp_avx2_movbe
+
+    12.38%    12.38%  main_seq  main_seq              [.] std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+            |
+            ---_start
+               __libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               Dataset::lerArquivo(char const*)
+               Dataset::categorizar(std::basic_string_view<char, std::char_traits<char> >, unsigned long)
+               std::__detail::_Node_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, false, true> std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, int> >, std::__detail::_Select1st, std::equal_to<void>, StringHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_tr<std::basic_string_view<char, std::char_traits<char> >, void, void>(std::basic_string_view<char, std::char_traits<char> > const&)
+
+    12.37%    12.37%  main_seq  ld-linux-x86-64.so.2  [.] do_lookup_x
+            |
+            ---_dl_start_user
+               _dl_start
+               _dl_sysdep_start
+               dl_main
+               _dl_relocate_object
+               _dl_relocate_object_no_relro
+               _dl_lookup_symbol_x
+               do_lookup_x
+
+    10.93%    10.93%  main_seq  main_seq              [.] void std::nth_element<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >)
+            |
+            ---_start
+               __libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               Dataset::rotina_coluna_numerica(unsigned long)
+               void std::nth_element<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >)
+
+    10.93%     0.00%  main_seq  main_seq              [.] Dataset::rotina_coluna_numerica(unsigned long)
+            |
+            ---Dataset::rotina_coluna_numerica(unsigned long)
+               void std::nth_element<__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > > >(__gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >, __gnu_cxx::__normal_iterator<double*, std::vector<double, std::allocator<double> > >)
+
+     3.29%     3.29%  main_seq  libstdc++.so.6.0.35   [.] std::from_chars(char const*, char const*, double&, std::chars_format)
+            |
+            ---std::from_chars(char const*, char const*, double&, std::chars_format)
+
+
+
+# Samples: 4  of event 'cpu_core/L1-dcache-load-misses/u'
+# Event count (approx.): 26469
+#
+# Children      Self  Command   Shared Object         Symbol                              
+# ........  ........  ........  ....................  ....................................
+#
+    70.83%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_start_user
+            |
+            ---_dl_start_user
+               _dl_start
+               _dl_sysdep_start
+               dl_main
+               _dl_relocate_object
+               _dl_relocate_object_no_relro
+               |          
+                --23.61%--_dl_lookup_symbol_x
+                          do_lookup_x
+
+    70.83%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_start
+            |
+            ---_dl_start
+               _dl_sysdep_start
+               dl_main
+               _dl_relocate_object
+               _dl_relocate_object_no_relro
+               |          
+                --23.61%--_dl_lookup_symbol_x
+                          do_lookup_x
+
+    70.83%    47.22%  main_seq  ld-linux-x86-64.so.2  [.] _dl_relocate_object_no_relro
+            |          
+            |--47.22%--_dl_start_user
+            |          _dl_start
+            |          _dl_sysdep_start
+            |          dl_main
+            |          _dl_relocate_object
+            |          _dl_relocate_object_no_relro
+            |          
+             --23.61%--_dl_relocate_object_no_relro
+                       _dl_lookup_symbol_x
+                       do_lookup_x
+
+    70.83%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_sysdep_start
+            |
+            ---_dl_sysdep_start
+               dl_main
+               _dl_relocate_object
+               _dl_relocate_object_no_relro
+               |          
+                --23.61%--_dl_lookup_symbol_x
+                          do_lookup_x
+
+    70.83%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] dl_main
+            |
+            ---dl_main
+               _dl_relocate_object
+               _dl_relocate_object_no_relro
+               |          
+                --23.61%--_dl_lookup_symbol_x
+                          do_lookup_x
+
+    70.83%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_relocate_object
+            |
+            ---_dl_relocate_object
+               _dl_relocate_object_no_relro
+               |          
+                --23.61%--_dl_lookup_symbol_x
+                          do_lookup_x
+
+    29.17%    29.17%  main_seq  libc.so.6             [.] __memmove_avx_unaligned_erms
+            |
+            ---_start
+               __libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               Dataset::lerArquivo(char const*)
+               __memmove_avx_unaligned_erms
+
+    29.17%     0.00%  main_seq  main_seq              [.] _start
+            |
+            ---_start
+               __libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               Dataset::lerArquivo(char const*)
+               __memmove_avx_unaligned_erms
+
+    29.17%     0.00%  main_seq  libc.so.6             [.] __libc_start_main@@GLIBC_2.34
+            |
+            ---__libc_start_main@@GLIBC_2.34
+               __libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               Dataset::lerArquivo(char const*)
+               __memmove_avx_unaligned_erms
+
+    29.17%     0.00%  main_seq  libc.so.6             [.] __libc_start_call_main
+            |
+            ---__libc_start_call_main
+               main
+               Dataset::Dataset(char const*)
+               Dataset::lerArquivo(char const*)
+               __memmove_avx_unaligned_erms
+
+    29.17%     0.00%  main_seq  main_seq              [.] main
+            |
+            ---main
+               Dataset::Dataset(char const*)
+               Dataset::lerArquivo(char const*)
+               __memmove_avx_unaligned_erms
+
+    29.17%     0.00%  main_seq  main_seq              [.] Dataset::Dataset(char const*)
+            |
+            ---Dataset::Dataset(char const*)
+               Dataset::lerArquivo(char const*)
+               __memmove_avx_unaligned_erms
+
+    29.17%     0.00%  main_seq  main_seq              [.] Dataset::lerArquivo(char const*)
+            |
+            ---Dataset::lerArquivo(char const*)
+               __memmove_avx_unaligned_erms
+
+    23.61%    23.61%  main_seq  ld-linux-x86-64.so.2  [.] do_lookup_x
+            |
+            ---_dl_start_user
+               _dl_start
+               _dl_sysdep_start
+               dl_main
+               _dl_relocate_object
+               _dl_relocate_object_no_relro
+               _dl_lookup_symbol_x
+               do_lookup_x
+
+    23.61%     0.00%  main_seq  ld-linux-x86-64.so.2  [.] _dl_lookup_symbol_x
+            |
+            ---_dl_lookup_symbol_x
+               do_lookup_x
+
+
+
+#
+# (Tip: For latency profiling, try: perf record/report --latency)
+#
+# PID  TID

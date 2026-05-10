@@ -1,0 +1,28 @@
+# started on Sun May  3 20:07:49 2026
+
+
+ Performance counter stats for './build/main_seq':
+
+              6,62 msec task-clock:u                                                          
+               225      page-faults:u                                                         
+         2.108.763      cpu_atom/branches/u                                                   
+     <not counted>      cpu_core/branches/u                                                     (0,00%)
+            38.068      cpu_atom/branch-misses/u                                              
+     <not counted>      cpu_core/branch-misses/u                                                (0,00%)
+        10.671.932      cpu_atom/instructions/u                                               
+     <not counted>      cpu_core/instructions/u                                                 (0,00%)
+         5.489.920      cpu_atom/cycles/u                                                     
+     <not counted>      cpu_core/cycles/u                                                       (0,00%)
+   <not supported>      cpu_atom/L1-dcache-load-misses/u                                      
+     <not counted>      cpu_core/L1-dcache-load-misses/u                                        (0,00%)
+             3.352      cpu_atom/LLC-loads/u                                                  
+     <not counted>      cpu_core/LLC-loads/u                                                    (0,00%)
+               168      cpu_atom/LLC-load-misses/u                                            
+     <not counted>      cpu_core/LLC-load-misses/u                                              (0,00%)
+
+       0,008995450 seconds time elapsed
+
+       0,003537000 seconds user
+       0,004425000 seconds sys
+
+
