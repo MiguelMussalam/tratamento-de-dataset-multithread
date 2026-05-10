@@ -1,28 +1,27 @@
-# started on Sun May 10 17:45:46 2026
+# started on Sun May 10 19:37:42 2026
 
 
  Performance counter stats for './build/main_mt data/02-20-2018.csv':
 
-         33.971,60 msec task-clock:u                                                          
-         1.371.261      page-faults:u                                                         
-    21.384.096.782      cpu_atom/branches/u                                                     (37,23%)
-    34.898.467.557      cpu_core/branches/u                                                     (84,57%)
-       500.914.144      cpu_atom/branch-misses/u                                                (37,23%)
-       689.421.742      cpu_core/branch-misses/u                                                (84,57%)
-   105.028.158.282      cpu_atom/instructions/u                                                 (37,23%)
-   181.783.563.230      cpu_core/instructions/u                                                 (84,57%)
-    61.236.042.775      cpu_atom/cycles/u                                                       (37,23%)
-   122.825.838.268      cpu_core/cycles/u                                                       (84,57%)
-   <not supported>      cpu_atom/L1-dcache-load-misses/u                                      
-       271.234.983      cpu_core/L1-dcache-load-misses/u                                        (84,57%)
-       147.246.043      cpu_atom/LLC-loads/u                                                    (37,23%)
-       154.080.396      cpu_core/LLC-loads/u                                                    (84,57%)
-           182.510      cpu_atom/LLC-load-misses/u                                              (37,23%)
-       108.276.727      cpu_core/LLC-load-misses/u                                              (84,57%)
+         33.204,37 msec task-clock:u                                                          
+         1.370.290      page-faults:u                                                         
+    29.715.516.596      cpu_atom/branches/u                                                     (27,53%)
+    34.168.141.639      cpu_core/branches/u                                                     (85,71%)
+       687.338.767      cpu_atom/branch-misses/u                                                (27,53%)
+       677.937.920      cpu_core/branch-misses/u                                                (85,71%)
+   146.602.225.467      cpu_atom/instructions/u                                                 (27,53%)
+   177.755.108.054      cpu_core/instructions/u                                                 (85,71%)
+    85.711.260.967      cpu_atom/cycles/u                                                       (27,53%)
+   126.145.697.867      cpu_core/cycles/u                                                       (85,71%)
+       247.303.985      cpu_core/L1-dcache-load-misses/u                                        (85,71%)
+       222.161.440      cpu_atom/LLC-loads/u                                                    (27,53%)
+       149.154.751      cpu_core/LLC-loads/u                                                    (85,71%)
+           272.141      cpu_atom/LLC-load-misses/u                                              (27,53%)
+       111.575.419      cpu_core/LLC-load-misses/u                                              (85,71%)
 
-      45,422025430 seconds time elapsed
+      14,658560639 seconds time elapsed
 
-      29,909259000 seconds user
-       3,947106000 seconds sys
+      30,302445000 seconds user
+       2,694338000 seconds sys
 
 

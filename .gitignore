@@ -7,3 +7,4 @@ resultados_perf/**/perf_trace.txt
 *.out
 *.csv
 !data/dataset_raw.csv
+tools/

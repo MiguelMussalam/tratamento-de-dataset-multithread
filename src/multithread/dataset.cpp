@@ -229,6 +229,9 @@ void Dataset::processarBloco(size_t inicio_byte, size_t fim_byte, size_t linha_i
 void Dataset::categorizarColuna(size_t indice_coluna) {
     auto& col = colunas[indice_coluna];
     
+    col.mapeamento.reserve(1024);
+    col.categorias.reserve(1024);
+
     for (size_t i = 0; i < num_linhas; i++) {
         std::string_view conteudo = col.raw_strings[i];
         
