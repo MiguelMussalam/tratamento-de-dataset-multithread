@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -O3 -g -fno-omit-frame-pointer -std=c++20 -pthread
+CXXFLAGS = -O3 -g -fno-omit-frame-pointer -std=c++20 -pthread -fopenmp
 BUILD_DIR = build
 PERF_DIR = resultados_perf
 

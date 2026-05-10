@@ -9,206 +9,243 @@
 #include <omp.h>
 
 Dataset::Dataset(const char *caminho){
-  lerArquivo(caminho);  // Segunda passagem: processa com pré-alocação
+  mapearArquivo(caminho);
+  lerCabecalho();
+  inferirTipos();
+  
+  contarLinhasParalelo();
+  alocarVetores();
+  processarLinhasParalelo();
   
   #pragma omp parallel for schedule(dynamic)
   for(size_t i = 0; i < num_colunas; i++){
-    if(colunas[i].tipo == NUMERICA){
+    if(colunas[i].tipo == CATEGORICA){
+      categorizarColuna(i);
+    } else if(colunas[i].tipo == NUMERICA){
       rotina_coluna_numerica(i);
     }
   }
 }
 
-void Dataset::lerArquivo(const char *caminho) {
-  std::cout << "Iniciando leitura..." << std::endl;
+void Dataset::mapearArquivo(const char* caminho) {
+    int fd = open(caminho, O_RDONLY);
+    if (fd == -1) { perror("open"); exit(1); }
 
-  int fd = open(caminho, O_RDONLY);
-  if (fd == -1) {
-    perror("open");
-    exit(1);
-  }
+    struct stat sb;
+    if (fstat(fd, &sb) == -1) { perror("fstat"); close(fd); exit(1); }
 
-  struct stat sb;
-  if (fstat(fd, &sb) == -1) {
-    perror("fstat");
+    map_size = sb.st_size;
+    if (map_size == 0) { close(fd); return; }
+
+    mapped = mmap(nullptr, map_size, PROT_READ, MAP_PRIVATE, fd, 0);
+    if (mapped == MAP_FAILED) { perror("mmap"); close(fd); exit(1); }
+
     close(fd);
-    exit(1);
-  }
+    arquivo = {static_cast<const char*>(mapped), map_size};
+}
 
-  size_t size = sb.st_size;
-  if (size == 0) {
-    std::cerr << "Arquivo vazio" << std::endl;
-    close(fd);
-    return;
-  }
+void Dataset::lerCabecalho() {
+    size_t primeiro_newline = arquivo.find('\n');
+    if (primeiro_newline == std::string_view::npos)
+        primeiro_newline = arquivo.size();
 
-  void *mapped = mmap(nullptr, size, PROT_READ, MAP_PRIVATE, fd, 0);
-  if (mapped == MAP_FAILED) {
-    perror("mmap");
-    close(fd);
-    exit(1);
-  }
+    std::string_view cabecalho = arquivo.substr(0, primeiro_newline);
+    if (!cabecalho.empty() && cabecalho.back() == '\r')
+        cabecalho.remove_suffix(1);
 
-  close(fd);
+    size_t count = 1;
+    for (char c : cabecalho) if (c == ',') count++;
+    colunas.reserve(count);
 
-  madvise(mapped, size, MADV_SEQUENTIAL);
-
-  std::string_view arquivo = {static_cast<const char *>(mapped), size};
-  std::string_view linha;
-  std::string_view conteudo;
-  size_t cursor_init_arquivo = 0;
-  size_t cursor_fim_arquivo = 0;
-  size_t cursor_init_linha = 0;
-  size_t cursor_fim_linha = 0;
-  size_t tam_substr = 0;
-  int coluna_atual = 0;
-  double v;
-
-  // reservando tam do cabecalho
-  size_t primeiro_newline = arquivo.find('\n');
-  if (primeiro_newline == std::string_view::npos) {
-    primeiro_newline = arquivo.size();
-  }
-
-  std::string_view cabecalho = arquivo.substr(0, primeiro_newline);
-  if (!cabecalho.empty() && cabecalho.back() == '\r')
-    cabecalho.remove_suffix(1);
-
-  size_t count = 1;
-  for (char c : cabecalho)
-    if (c == ',')
-      count++;
-
-  colunas.reserve(count);
-  
-  std::cout << "Colunas: " << count << std::endl;
-
-  // - criação do cabeçalho -
-  size_t cursor_init_cab = 0;
-  while (cursor_init_cab < cabecalho.size()) {
-    tam_substr = cabecalho.find(',', cursor_init_cab);
-
-    if (tam_substr == std::string_view::npos) {
-      conteudo = cabecalho.substr(cursor_init_cab);
-      cursor_init_cab = cabecalho.size();
-    } else {
-      conteudo =
-          cabecalho.substr(cursor_init_cab, (tam_substr - cursor_init_cab));
-      cursor_init_cab = tam_substr + 1;
-    }
-
-    colunas.emplace_back();
-    colunas.back().nome = std::string(conteudo);
-    colunas.back().tipo = NUMERICA;
-    num_colunas++;
-  }
-
-  size_t linhas_estimadas = arquivo.size() / 90;
-
-  for (auto& col : colunas) {
-      col.valores.reserve(linhas_estimadas);
-  }
-
-  // avança o cursor para pular o cabeçalho na leitura de dados
-  if (primeiro_newline == arquivo.size()) {
-    munmap(mapped, size);
-    return;
-  }
-  cursor_init_arquivo = primeiro_newline + 1;
-
-  while (cursor_init_arquivo < arquivo.size()) {
-    cursor_fim_arquivo = arquivo.find('\n', cursor_init_arquivo);
-
-    if (cursor_fim_arquivo == std::string_view::npos) {
-      linha = arquivo.substr(cursor_init_arquivo);
-    } else {
-      linha = arquivo.substr(cursor_init_arquivo,
-                             cursor_fim_arquivo - cursor_init_arquivo);
-    }
-    while (!linha.empty() && (linha.back() == '\r' || linha.back() == '\n'))
-      linha.remove_suffix(1);
-
-    while (cursor_init_linha < linha.size()) {
-      tam_substr = linha.find(',', cursor_init_linha);
-
-      // npos - não encontrou proximo ','
-      if (tam_substr == std::string_view::npos) {
-        conteudo = linha.substr(cursor_init_linha);
-        cursor_init_linha = linha.size();
-      } else {
-        conteudo =
-            linha.substr(cursor_init_linha, (tam_substr - cursor_init_linha));
-        cursor_init_linha = tam_substr + 1;
-      }
-
-
-      auto [ptr, ec] = std::from_chars(conteudo.data(), conteudo.data() + conteudo.size(), v);
-
-      // valor encaixa em double ou não
-      if (ec == std::errc() && ptr == conteudo.data() + conteudo.size()) {
-          if (colunas[coluna_atual].tipo == CATEGORICA) {
-              categorizar(conteudo, coluna_atual);
-          } else {
-              colunas[coluna_atual].valores.push_back(v);
-          }
-      } else {
-        if (colunas[coluna_atual].tipo != CATEGORICA) {
-          colunas[coluna_atual].tipo = CATEGORICA;
-          ReprocessarCategorizacao(coluna_atual);
+    size_t cursor = 0;
+    while (cursor <= cabecalho.size()) {
+        size_t virgula = cabecalho.find(',', cursor);
+        std::string_view nome;
+        if (virgula == std::string_view::npos) {
+            nome = cabecalho.substr(cursor);
+            cursor = cabecalho.size() + 1;
+        } else {
+            nome = cabecalho.substr(cursor, virgula - cursor);
+            cursor = virgula + 1;
         }
-        categorizar(conteudo, coluna_atual);
-      }
-      coluna_atual++;
+        colunas.emplace_back();
+        colunas.back().nome = std::string(nome);
+        colunas.back().tipo = DESCONHECIDA;
+        num_colunas++;
     }
-    cursor_init_linha = 0;
-    coluna_atual = 0;
-    num_linhas++;
 
-    if (cursor_fim_arquivo == std::string_view::npos) {
-      cursor_init_arquivo = arquivo.size();
-    } else {
-      cursor_init_arquivo = cursor_fim_arquivo + 1;
-    }
-  }
-
-  munmap(mapped, size);
+    // guarda onde os dados começam
+    cabecalho_size = primeiro_newline + 1;
 }
 
-void Dataset::categorizar(std::string_view conteudo, size_t indice_coluna) {
-  auto it = colunas[indice_coluna].mapeamento.find(conteudo);
+void Dataset::inferirTipos() {
+    size_t cursor = cabecalho_size;
+    int linhas_lidas = 0;
 
-  if (it == colunas[indice_coluna].mapeamento.end()) {
-    int indice = colunas[indice_coluna].categorias.size();
-    colunas[indice_coluna].mapeamento.emplace(std::string(conteudo), indice);
-    colunas[indice_coluna].categorias.emplace_back(conteudo);
-    colunas[indice_coluna].valores.push_back(indice);
-  } else {
-    colunas[indice_coluna].valores.push_back(it->second);
-  }
+    while (cursor < arquivo.size() && linhas_lidas < 10) {
+        size_t fim = arquivo.find('\n', cursor);
+        std::string_view linha = arquivo.substr(cursor,
+            fim == std::string_view::npos ? arquivo.size() - cursor : fim - cursor);
+        if (!linha.empty() && linha.back() == '\r') linha.remove_suffix(1);
+
+        int j = 0;
+        size_t ini = 0;
+        while (ini < linha.size()) {
+            size_t virgula = linha.find(',', ini);
+            std::string_view cel = (virgula == std::string_view::npos)
+                ? linha.substr(ini)
+                : linha.substr(ini, virgula - ini);
+
+            if (colunas[j].tipo != CATEGORICA) {
+                float v;
+                auto [ptr, ec] = std::from_chars(cel.data(), cel.data() + cel.size(), v);
+                if (ec != std::errc() || ptr != cel.data() + cel.size())
+                    colunas[j].tipo = CATEGORICA;
+                else
+                    colunas[j].tipo = NUMERICA;
+            }
+
+            ini = (virgula == std::string_view::npos) ? linha.size() : virgula + 1;
+            j++;
+        }
+
+        cursor = (fim == std::string_view::npos) ? arquivo.size() : fim + 1;
+        linhas_lidas++;
+    }
 }
 
-void Dataset::ReprocessarCategorizacao(size_t indice_coluna) {
-  std::vector<double> valores_anteriores = std::move(colunas[indice_coluna].valores);
+void Dataset::contarLinhasParalelo() {
+    size_t data_start = cabecalho_size;
+    size_t data_size = arquivo.size() - data_start;
+    
+    int num_threads = omp_get_max_threads();
+    size_t chunk_size = data_size / num_threads;
+    
+    blocos_bytes.resize(num_threads);
+    blocos_linhas_iniciais.resize(num_threads, 0);
+    std::vector<size_t> linhas_por_thread(num_threads, 0);
 
-  for (double val : valores_anteriores) {
-    char buffer[64];
-    auto [ptr, ec] = std::to_chars(buffer, buffer + sizeof(buffer), val);
-    std::string_view chave_temp(buffer, ptr - buffer);
-
-    auto it = colunas[indice_coluna].mapeamento.find(chave_temp);
-    if (it == colunas[indice_coluna].mapeamento.end()) {
-      int indice = colunas[indice_coluna].categorias.size();
-      colunas[indice_coluna].mapeamento.emplace(std::string(chave_temp), indice);
-      colunas[indice_coluna].categorias.emplace_back(chave_temp);
-      colunas[indice_coluna].valores.push_back(indice);
-    } else {
-      colunas[indice_coluna].valores.push_back(it->second);
+    #pragma omp parallel
+    {
+        int tid = omp_get_thread_num();
+        size_t inicio = data_start + tid * chunk_size;
+        size_t fim = (tid == num_threads - 1) ? arquivo.size() : data_start + (tid + 1) * chunk_size;
+        
+        if (tid > 0) {
+            while (inicio < arquivo.size() && arquivo[inicio - 1] != '\n') {
+                inicio++;
+            }
+        }
+        
+        // Dica de cache local (madvise) para a página exata deste bloco
+        size_t page_size = sysconf(_SC_PAGESIZE);
+        size_t aligned_start = (inicio / page_size) * page_size;
+        void* addr = static_cast<char*>(mapped) + aligned_start;
+        size_t length = fim - aligned_start;
+        madvise(addr, length, MADV_WILLNEED);
+        
+        blocos_bytes[tid] = {inicio, fim};
+        
+        size_t count = 0;
+        for (size_t i = inicio; i < fim; i++) {
+            if (arquivo[i] == '\n') count++;
+        }
+        if (tid == num_threads - 1 && fim > 0 && arquivo[fim - 1] != '\n' && fim > inicio) {
+            count++; 
+        }
+        
+        linhas_por_thread[tid] = count;
     }
-  }
+    
+    num_linhas = 0;
+    for (int i = 0; i < num_threads; i++) {
+        blocos_linhas_iniciais[i] = num_linhas;
+        num_linhas += linhas_por_thread[i];
+    }
+}
+
+void Dataset::alocarVetores() {
+    for (auto& col : colunas) {
+        if (col.tipo == NUMERICA) {
+            col.valores.resize(num_linhas, 0.0f);
+        } else {
+            col.valores.resize(num_linhas, 0.0f); 
+            col.raw_strings.resize(num_linhas, std::string_view()); 
+        }
+    }
+}
+
+void Dataset::processarLinhasParalelo() {
+    int num_threads = blocos_bytes.size();
+    
+    #pragma omp parallel
+    {
+        int tid = omp_get_thread_num();
+        if (tid < num_threads) {
+            processarBloco(blocos_bytes[tid].first, blocos_bytes[tid].second, blocos_linhas_iniciais[tid]);
+        }
+    }
+}
+
+void Dataset::processarBloco(size_t inicio_byte, size_t fim_byte, size_t linha_inicial) {
+    size_t cursor = inicio_byte;
+    size_t indice_linha = linha_inicial;
+    
+    while (cursor < fim_byte) {
+        size_t fim_linha = arquivo.find('\n', cursor);
+        std::string_view linha = arquivo.substr(cursor, 
+            fim_linha == std::string_view::npos ? arquivo.size() - cursor : fim_linha - cursor);
+            
+        if (!linha.empty() && linha.back() == '\r') linha.remove_suffix(1);
+        
+        size_t ini = 0;
+        int j = 0;
+        float v;
+        
+        while (ini < linha.size() && j < num_colunas) {
+            size_t virgula = linha.find(',', ini);
+            std::string_view cel = (virgula == std::string_view::npos)
+                ? linha.substr(ini)
+                : linha.substr(ini, virgula - ini);
+                
+            if (colunas[j].tipo == NUMERICA) {
+                auto [ptr, ec] = std::from_chars(cel.data(), cel.data() + cel.size(), v);
+                if (ec == std::errc() && ptr == cel.data() + cel.size()) {
+                    colunas[j].valores[indice_linha] = v;
+                }
+            } else {
+                colunas[j].raw_strings[indice_linha] = cel;
+            }
+            
+            ini = (virgula == std::string_view::npos) ? linha.size() : virgula + 1;
+            j++;
+        }
+        
+        cursor = (fim_linha == std::string_view::npos) ? arquivo.size() : fim_linha + 1;
+        indice_linha++;
+    }
+}
+
+void Dataset::categorizarColuna(size_t indice_coluna) {
+    auto& col = colunas[indice_coluna];
+    
+    for (size_t i = 0; i < num_linhas; i++) {
+        std::string_view conteudo = col.raw_strings[i];
+        
+        auto it = col.mapeamento.find(conteudo);
+        if (it == col.mapeamento.end()) {
+            int novo_id = col.categorias.size();
+            col.mapeamento.emplace(std::string(conteudo), novo_id);
+            col.categorias.emplace_back(conteudo);
+            col.valores[i] = novo_id;
+        } else {
+            col.valores[i] = it->second;
+        }
+    }
 }
 
 void Dataset::rotina_coluna_numerica(size_t indice_coluna) {
-  const std::vector<double>& valores_originais = colunas[indice_coluna].valores;
+  const std::vector<float>& valores_originais = colunas[indice_coluna].valores;
   colunas[indice_coluna].estatisticas = std::make_unique<EstatisticasNumericas>();
   EstatisticasNumericas& estatisticas = *colunas[indice_coluna].estatisticas;
 
@@ -216,15 +253,15 @@ void Dataset::rotina_coluna_numerica(size_t indice_coluna) {
   estatisticas.variancia    = variancia(valores_originais, estatisticas.media);
   estatisticas.desvio_padrao= desvio_padrao(estatisticas.variancia);
   
-  std::vector<double> valores_para_ordenar(valores_originais); 
+  std::vector<float> valores_para_ordenar(valores_originais); 
   
   estatisticas.mediana      = mediana(valores_para_ordenar);
   estatisticas.iqr          = iqr(valores_para_ordenar);
 }
 
 
-double Dataset::media(const std::vector<double>& valores_coluna) {
-  double media = 0;
+float Dataset::media(const std::vector<float>& valores_coluna) {
+  float media = 0;
 
   for(size_t i = 0; i < (num_linhas); i++){
     media += valores_coluna[i];
@@ -234,22 +271,22 @@ double Dataset::media(const std::vector<double>& valores_coluna) {
   return media;
 }
 
-double Dataset::variancia(const std::vector<double>& valores_coluna, double media) {
-    double soma = 0;
+float Dataset::variancia(const std::vector<float>& valores_coluna, float media) {
+    float soma = 0;
 
-    for (const double& valor : valores_coluna) {
-        double diferenca = valor - media;
+    for (const float& valor : valores_coluna) {
+        float diferenca = valor - media;
         soma += diferenca * diferenca;
     }
 
     return soma / valores_coluna.size();
 }
 
-double Dataset::desvio_padrao(double variancia) {
+float Dataset::desvio_padrao(float variancia) {
   return std::sqrt(variancia);
 }
 
-double Dataset::mediana(std::vector<double>& valores_coluna) {
+float Dataset::mediana(std::vector<float>& valores_coluna) {
     size_t n = valores_coluna.size();
     size_t meio = n / 2;
 
@@ -258,12 +295,12 @@ double Dataset::mediana(std::vector<double>& valores_coluna) {
     if (n % 2 == 1) {
         return valores_coluna[meio];
     } else {
-        double maior_inferior = *std::max_element(valores_coluna.begin(), valores_coluna.begin() + meio);
-        return (maior_inferior + valores_coluna[meio]) / 2.0;
+        float maior_inferior = *std::max_element(valores_coluna.begin(), valores_coluna.begin() + meio);
+        return (maior_inferior + valores_coluna[meio]) / 2.0f;
     }
 }
 
-double Dataset::iqr(std::vector<double>& valores_coluna) {
+float Dataset::iqr(std::vector<float>& valores_coluna) {
     size_t n = valores_coluna.size();
 
     // Q1 — mediana da metade inferior
@@ -271,14 +308,14 @@ double Dataset::iqr(std::vector<double>& valores_coluna) {
     std::nth_element(valores_coluna.begin(),
                      valores_coluna.begin() + pos_q1,
                      valores_coluna.end());
-    double q1 = valores_coluna[pos_q1];
+    float q1 = valores_coluna[pos_q1];
 
     // Q3 — mediana da metade superior
     size_t pos_q3 = (3 * n) / 4;
     std::nth_element(valores_coluna.begin(),
                      valores_coluna.begin() + pos_q3,
                      valores_coluna.end());
-    double q3 = valores_coluna[pos_q3];
+    float q3 = valores_coluna[pos_q3];
 
     return q3 - q1;
 }

@@ -8,16 +8,22 @@
 #include <iomanip>
 
 Dataset::Dataset(const char *caminho){
-  lerArquivo(caminho);  // Segunda passagem: processa com pré-alocação
+  mapearArquivo(caminho);
+  lerCabecalho();
+  processarLinhas();
   
   for(size_t i = 0; i < num_colunas; i++){
     if(colunas[i].tipo == NUMERICA){
       rotina_coluna_numerica(i);
     }
   }
+
+  if (mapped && mapped != MAP_FAILED) {
+      munmap(mapped, map_size);
+  }
 }
 
-void Dataset::lerArquivo(const char *caminho) {
+void Dataset::mapearArquivo(const char *caminho) {
   std::cout << "Iniciando leitura..." << std::endl;
 
   int fd = open(caminho, O_RDONLY);
@@ -33,14 +39,14 @@ void Dataset::lerArquivo(const char *caminho) {
     exit(1);
   }
 
-  size_t size = sb.st_size;
-  if (size == 0) {
+  map_size = sb.st_size;
+  if (map_size == 0) {
     std::cerr << "Arquivo vazio" << std::endl;
     close(fd);
     return;
   }
 
-  void *mapped = mmap(nullptr, size, PROT_READ, MAP_PRIVATE, fd, 0);
+  mapped = mmap(nullptr, map_size, PROT_READ, MAP_PRIVATE, fd, 0);
   if (mapped == MAP_FAILED) {
     perror("mmap");
     close(fd);
@@ -49,20 +55,12 @@ void Dataset::lerArquivo(const char *caminho) {
 
   close(fd);
 
-  madvise(mapped, size, MADV_SEQUENTIAL);
+  madvise(mapped, map_size, MADV_SEQUENTIAL);
 
-  std::string_view arquivo = {static_cast<const char *>(mapped), size};
-  std::string_view linha;
-  std::string_view conteudo;
-  size_t cursor_init_arquivo = 0;
-  size_t cursor_fim_arquivo = 0;
-  size_t cursor_init_linha = 0;
-  size_t cursor_fim_linha = 0;
-  size_t tam_substr = 0;
-  int coluna_atual = 0;
-  double v;
+  arquivo = {static_cast<const char *>(mapped), map_size};
+}
 
-  // reservando tam do cabecalho
+void Dataset::lerCabecalho() {
   size_t primeiro_newline = arquivo.find('\n');
   if (primeiro_newline == std::string_view::npos) {
     primeiro_newline = arquivo.size();
@@ -81,8 +79,10 @@ void Dataset::lerArquivo(const char *caminho) {
   
   std::cout << "Colunas: " << count << std::endl;
 
-  // - criação do cabeçalho -
   size_t cursor_init_cab = 0;
+  size_t tam_substr = 0;
+  std::string_view conteudo;
+
   while (cursor_init_cab < cabecalho.size()) {
     tam_substr = cabecalho.find(',', cursor_init_cab);
 
@@ -90,8 +90,7 @@ void Dataset::lerArquivo(const char *caminho) {
       conteudo = cabecalho.substr(cursor_init_cab);
       cursor_init_cab = cabecalho.size();
     } else {
-      conteudo =
-          cabecalho.substr(cursor_init_cab, (tam_substr - cursor_init_cab));
+      conteudo = cabecalho.substr(cursor_init_cab, (tam_substr - cursor_init_cab));
       cursor_init_cab = tam_substr + 1;
     }
 
@@ -107,12 +106,20 @@ void Dataset::lerArquivo(const char *caminho) {
       col.valores.reserve(linhas_estimadas);
   }
 
-  // avança o cursor para pular o cabeçalho na leitura de dados
-  if (primeiro_newline == arquivo.size()) {
-    munmap(mapped, size);
-    return;
-  }
-  cursor_init_arquivo = primeiro_newline + 1;
+  cabecalho_size = primeiro_newline + 1;
+}
+
+void Dataset::processarLinhas() {
+  if (cabecalho_size >= arquivo.size()) return;
+
+  size_t cursor_init_arquivo = cabecalho_size;
+  size_t cursor_fim_arquivo = 0;
+  size_t cursor_init_linha = 0;
+  size_t tam_substr = 0;
+  int coluna_atual = 0;
+  double v;
+  std::string_view linha;
+  std::string_view conteudo;
 
   while (cursor_init_arquivo < arquivo.size()) {
     cursor_fim_arquivo = arquivo.find('\n', cursor_init_arquivo);
@@ -120,8 +127,7 @@ void Dataset::lerArquivo(const char *caminho) {
     if (cursor_fim_arquivo == std::string_view::npos) {
       linha = arquivo.substr(cursor_init_arquivo);
     } else {
-      linha = arquivo.substr(cursor_init_arquivo,
-                             cursor_fim_arquivo - cursor_init_arquivo);
+      linha = arquivo.substr(cursor_init_arquivo, cursor_fim_arquivo - cursor_init_arquivo);
     }
     while (!linha.empty() && (linha.back() == '\r' || linha.back() == '\n'))
       linha.remove_suffix(1);
@@ -129,20 +135,16 @@ void Dataset::lerArquivo(const char *caminho) {
     while (cursor_init_linha < linha.size()) {
       tam_substr = linha.find(',', cursor_init_linha);
 
-      // npos - não encontrou proximo ','
       if (tam_substr == std::string_view::npos) {
         conteudo = linha.substr(cursor_init_linha);
         cursor_init_linha = linha.size();
       } else {
-        conteudo =
-            linha.substr(cursor_init_linha, (tam_substr - cursor_init_linha));
+        conteudo = linha.substr(cursor_init_linha, (tam_substr - cursor_init_linha));
         cursor_init_linha = tam_substr + 1;
       }
 
-
       auto [ptr, ec] = std::from_chars(conteudo.data(), conteudo.data() + conteudo.size(), v);
 
-      // valor encaixa em double ou não
       if (ec == std::errc() && ptr == conteudo.data() + conteudo.size()) {
           if (colunas[coluna_atual].tipo == CATEGORICA) {
               categorizar(conteudo, coluna_atual);
@@ -168,8 +170,6 @@ void Dataset::lerArquivo(const char *caminho) {
       cursor_init_arquivo = cursor_fim_arquivo + 1;
     }
   }
-
-  munmap(mapped, size);
 }
 
 void Dataset::categorizar(std::string_view conteudo, size_t indice_coluna) {

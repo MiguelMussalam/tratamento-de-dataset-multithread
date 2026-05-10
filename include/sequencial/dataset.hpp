@@ -41,11 +41,18 @@ struct Coluna {
 
 class Dataset {
 private:
+  void* mapped = nullptr;
+  size_t map_size = 0;
+  std::string_view arquivo;
+  size_t cabecalho_size = 0;
+
   std::vector<Coluna> colunas;
   size_t num_linhas = 0;
   size_t num_colunas = 0;
   
-  void lerArquivo(const char *caminho);
+  void mapearArquivo(const char *caminho);
+  void lerCabecalho();
+  void processarLinhas();
 
   void categorizar(std::string_view conteudo, size_t indice_coluna);
   void ReprocessarCategorizacao(size_t indice_atual);
