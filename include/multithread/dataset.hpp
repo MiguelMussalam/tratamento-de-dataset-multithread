@@ -1,10 +1,14 @@
 #pragma once
 #include <string>
 #include <vector>
+#ifdef _WIN32
+#include <windows.h>
+#else
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#endif
 #include <unordered_map>
 #include <memory>
 #include <string_view>
@@ -17,7 +21,7 @@ struct StringHash {
     }
 };
 
-using CategoriaMap = std::unordered_map<std::string, int, StringHash, std::equal_to<>>;
+using CategoriaMap = std::unordered_map<std::string_view, int, StringHash, std::equal_to<>>;
 
 struct EstatisticasNumericas{
   float media = 0;
@@ -29,14 +33,38 @@ struct EstatisticasNumericas{
 
 enum TipoColuna { CATEGORICA, NUMERICA, DESCONHECIDA };
 
+class StringPool {
+private:
+    std::vector<std::unique_ptr<char[]>> blocos;
+    size_t deslocamento_atual = 0;
+    size_t capacidade_atual = 0;
+    const size_t tamanho_padrao_bloco = 16 * 1024 * 1024; // 16 MB
+
+public:
+    std::string_view adicionar(std::string_view texto) {
+        if (deslocamento_atual + texto.size() > capacidade_atual) {
+            capacidade_atual = std::max(tamanho_padrao_bloco, texto.size());
+            blocos.push_back(std::make_unique<char[]>(capacidade_atual));
+            deslocamento_atual = 0;
+        }
+        
+        char* destino = blocos.back().get() + deslocamento_atual;
+        std::copy(texto.begin(), texto.end(), destino);
+        deslocamento_atual += texto.size();
+        
+        return {destino, texto.size()};
+    }
+};
+
 struct Coluna {
   std::string nome;
   TipoColuna tipo = DESCONHECIDA;
 
   std::vector<float> valores;
   std::vector<std::string_view> raw_strings; // Salva o ponteiro sem parsear
+  StringPool reservatorio;
   CategoriaMap mapeamento;
-  std::vector<std::string> categorias;
+  std::vector<std::string_view> categorias;
   std::unique_ptr<EstatisticasNumericas> estatisticas;
 };
 

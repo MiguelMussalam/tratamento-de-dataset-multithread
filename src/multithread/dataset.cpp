@@ -25,6 +25,17 @@ Dataset::Dataset(const char *caminho){
       rotina_coluna_numerica(i);
     }
   }
+
+  if (mapped) {
+#ifdef _WIN32
+      UnmapViewOfFile(mapped);
+#else
+      if (mapped != MAP_FAILED) {
+          munmap(mapped, map_size);
+      }
+#endif
+      mapped = nullptr;
+  }
 }
 
 void Dataset::mapearArquivo(const char* caminho) {
@@ -137,12 +148,14 @@ void Dataset::contarLinhasParalelo() {
             }
         }
         
+#ifndef _WIN32
         // Dica de cache local (madvise) para a página exata deste bloco
         size_t page_size = sysconf(_SC_PAGESIZE);
         size_t aligned_start = (inicio / page_size) * page_size;
         void* addr = static_cast<char*>(mapped) + aligned_start;
         size_t length = fim - aligned_start;
         madvise(addr, length, MADV_WILLNEED);
+#endif
         
         blocos_bytes[tid] = {inicio, fim};
         
@@ -224,6 +237,17 @@ void Dataset::processarBloco(size_t inicio_byte, size_t fim_byte, size_t linha_i
         cursor = (fim_linha == std::string_view::npos) ? arquivo.size() : fim_linha + 1;
         indice_linha++;
     }
+
+#ifndef _WIN32
+    // Libera as páginas deste bloco após parsing completo
+    size_t page_size = sysconf(_SC_PAGESIZE);
+    size_t aligned   = (inicio_byte / page_size) * page_size;
+    madvise(
+        static_cast<char*>(mapped) + aligned,
+        fim_byte - aligned,
+        MADV_DONTNEED
+    );
+#endif
 }
 
 void Dataset::categorizarColuna(size_t indice_coluna) {
@@ -238,13 +262,17 @@ void Dataset::categorizarColuna(size_t indice_coluna) {
         auto it = col.mapeamento.find(conteudo);
         if (it == col.mapeamento.end()) {
             int novo_id = col.categorias.size();
-            col.mapeamento.emplace(std::string(conteudo), novo_id);
-            col.categorias.emplace_back(conteudo);
+            std::string_view pooled_str = col.reservatorio.adicionar(conteudo);
+            col.mapeamento.emplace(pooled_str, novo_id);
+            col.categorias.emplace_back(pooled_str);
             col.valores[i] = novo_id;
         } else {
             col.valores[i] = it->second;
         }
     }
+    
+    // Free the raw_strings memory immediately
+    std::vector<std::string_view>().swap(col.raw_strings);
 }
 
 void Dataset::rotina_coluna_numerica(size_t indice_coluna) {

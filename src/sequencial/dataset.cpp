@@ -18,14 +18,55 @@ Dataset::Dataset(const char *caminho){
     }
   }
 
-  if (mapped && mapped != MAP_FAILED) {
-      munmap(mapped, map_size);
+  if (mapped) {
+#ifdef _WIN32
+      UnmapViewOfFile(mapped);
+#else
+      if (mapped != MAP_FAILED) {
+          munmap(mapped, map_size);
+      }
+#endif
+      mapped = nullptr;
   }
 }
 
 void Dataset::mapearArquivo(const char *caminho) {
   std::cout << "Iniciando leitura..." << std::endl;
 
+#ifdef _WIN32
+  HANDLE hFile = CreateFileA(caminho, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+  if (hFile == INVALID_HANDLE_VALUE) {
+      fprintf(stderr, "CreateFileA failed\n");
+      exit(1);
+  }
+  
+  LARGE_INTEGER size;
+  if (!GetFileSizeEx(hFile, &size)) {
+      fprintf(stderr, "GetFileSizeEx failed\n");
+      CloseHandle(hFile);
+      exit(1);
+  }
+  map_size = size.QuadPart;
+  if (map_size == 0) { CloseHandle(hFile); return; }
+
+  HANDLE hMapping = CreateFileMappingA(hFile, NULL, PAGE_READONLY, 0, 0, NULL);
+  if (hMapping == NULL) {
+      fprintf(stderr, "CreateFileMappingA failed\n");
+      CloseHandle(hFile);
+      exit(1);
+  }
+
+  mapped = MapViewOfFile(hMapping, FILE_MAP_READ, 0, 0, 0);
+  if (mapped == NULL) {
+      fprintf(stderr, "MapViewOfFile failed\n");
+      CloseHandle(hMapping);
+      CloseHandle(hFile);
+      exit(1);
+  }
+  
+  CloseHandle(hMapping);
+  CloseHandle(hFile);
+#else
   int fd = open(caminho, O_RDONLY);
   if (fd == -1) {
     perror("open");
@@ -54,8 +95,7 @@ void Dataset::mapearArquivo(const char *caminho) {
   }
 
   close(fd);
-
-  madvise(mapped, map_size, MADV_SEQUENTIAL);
+#endif
 
   arquivo = {static_cast<const char *>(mapped), map_size};
 }
@@ -121,6 +161,12 @@ void Dataset::processarLinhas() {
   std::string_view linha;
   std::string_view conteudo;
 
+  // MADV_DONTNEED: libera páginas já processadas conforme o cursor avança
+#ifndef _WIN32
+  const size_t page_size = sysconf(_SC_PAGESIZE);
+  size_t ultima_pagina_liberada = (cabecalho_size / page_size) * page_size;
+#endif
+
   while (cursor_init_arquivo < arquivo.size()) {
     cursor_fim_arquivo = arquivo.find('\n', cursor_init_arquivo);
 
@@ -169,6 +215,19 @@ void Dataset::processarLinhas() {
     } else {
       cursor_init_arquivo = cursor_fim_arquivo + 1;
     }
+
+    // Libera as páginas do arquivo que o cursor já passou
+#ifndef _WIN32
+    size_t pagina_atual = (cursor_init_arquivo / page_size) * page_size;
+    if (pagina_atual > ultima_pagina_liberada) {
+      madvise(
+        static_cast<char*>(mapped) + ultima_pagina_liberada,
+        pagina_atual - ultima_pagina_liberada,
+        MADV_DONTNEED
+      );
+      ultima_pagina_liberada = pagina_atual;
+    }
+#endif
   }
 }
 
@@ -177,8 +236,9 @@ void Dataset::categorizar(std::string_view conteudo, size_t indice_coluna) {
 
   if (it == colunas[indice_coluna].mapeamento.end()) {
     int indice = colunas[indice_coluna].categorias.size();
-    colunas[indice_coluna].mapeamento.emplace(std::string(conteudo), indice);
-    colunas[indice_coluna].categorias.emplace_back(conteudo);
+    std::string_view pooled_str = colunas[indice_coluna].reservatorio.adicionar(conteudo);
+    colunas[indice_coluna].mapeamento.emplace(pooled_str, indice);
+    colunas[indice_coluna].categorias.emplace_back(pooled_str);
     colunas[indice_coluna].valores.push_back(indice);
   } else {
     colunas[indice_coluna].valores.push_back(it->second);
@@ -196,8 +256,9 @@ void Dataset::ReprocessarCategorizacao(size_t indice_coluna) {
     auto it = colunas[indice_coluna].mapeamento.find(chave_temp);
     if (it == colunas[indice_coluna].mapeamento.end()) {
       int indice = colunas[indice_coluna].categorias.size();
-      colunas[indice_coluna].mapeamento.emplace(std::string(chave_temp), indice);
-      colunas[indice_coluna].categorias.emplace_back(chave_temp);
+      std::string_view pooled_str = colunas[indice_coluna].reservatorio.adicionar(chave_temp);
+      colunas[indice_coluna].mapeamento.emplace(pooled_str, indice);
+      colunas[indice_coluna].categorias.emplace_back(pooled_str);
       colunas[indice_coluna].valores.push_back(indice);
     } else {
       colunas[indice_coluna].valores.push_back(it->second);
