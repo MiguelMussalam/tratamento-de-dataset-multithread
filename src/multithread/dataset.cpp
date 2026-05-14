@@ -39,6 +39,40 @@ Dataset::Dataset(const char *caminho){
 }
 
 void Dataset::mapearArquivo(const char* caminho) {
+#ifdef _WIN32
+    HANDLE hFile = CreateFileA(caminho, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (hFile == INVALID_HANDLE_VALUE) {
+        fprintf(stderr, "CreateFileA failed\n");
+        exit(1);
+    }
+    
+    LARGE_INTEGER size;
+    if (!GetFileSizeEx(hFile, &size)) {
+        fprintf(stderr, "GetFileSizeEx failed\n");
+        CloseHandle(hFile);
+        exit(1);
+    }
+    map_size = size.QuadPart;
+    if (map_size == 0) { CloseHandle(hFile); return; }
+
+    HANDLE hMapping = CreateFileMappingA(hFile, NULL, PAGE_READONLY, 0, 0, NULL);
+    if (hMapping == NULL) {
+        fprintf(stderr, "CreateFileMappingA failed\n");
+        CloseHandle(hFile);
+        exit(1);
+    }
+
+    mapped = MapViewOfFile(hMapping, FILE_MAP_READ, 0, 0, 0);
+    if (mapped == NULL) {
+        fprintf(stderr, "MapViewOfFile failed\n");
+        CloseHandle(hMapping);
+        CloseHandle(hFile);
+        exit(1);
+    }
+    
+    CloseHandle(hMapping);
+    CloseHandle(hFile);
+#else
     int fd = open(caminho, O_RDONLY);
     if (fd == -1) { perror("open"); exit(1); }
 
@@ -52,6 +86,7 @@ void Dataset::mapearArquivo(const char* caminho) {
     if (mapped == MAP_FAILED) { perror("mmap"); close(fd); exit(1); }
 
     close(fd);
+#endif
     arquivo = {static_cast<const char*>(mapped), map_size};
 }
 
