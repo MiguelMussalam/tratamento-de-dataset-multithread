@@ -9,14 +9,27 @@
 #include <omp.h>
 
 Dataset::Dataset(const char *caminho){
+  // Habilita paralelismo aninhado: o loop das colunas já é paralelo,
+  // e as funções internas (media, variancia) também criarão sub-regiões paralelas.
+  omp_set_max_active_levels(2);
+
+  double t0, t1;
+
+  t0 = omp_get_wtime();
   mapearArquivo(caminho);
   lerCabecalho();
   inferirTipos();
-  
+  t1 = omp_get_wtime();
+  std::cerr << "[FASE] mapeamento+cabecalho: " << (t1-t0)*1000 << " ms\n";
+
+  t0 = omp_get_wtime();
   contarLinhasParalelo();
   alocarVetores();
   processarLinhasParalelo();
-  
+  t1 = omp_get_wtime();
+  std::cerr << "[FASE] parsing linhas:        " << (t1-t0)*1000 << " ms\n";
+
+  t0 = omp_get_wtime();
   #pragma omp parallel for schedule(dynamic)
   for(size_t i = 0; i < num_colunas; i++){
     if(colunas[i].tipo == CATEGORICA){
@@ -25,6 +38,9 @@ Dataset::Dataset(const char *caminho){
       rotina_coluna_numerica(i);
     }
   }
+  t1 = omp_get_wtime();
+  std::cerr << "[FASE] categoriz+numerica:    " << (t1-t0)*1000 << " ms\n";
+  std::cerr << "[FASE] threads ativos neste nivel: " << omp_get_max_threads() << "\n";
 
   if (mapped) {
 #ifdef _WIN32
@@ -318,34 +334,41 @@ void Dataset::rotina_coluna_numerica(size_t indice_coluna) {
   estatisticas.media        = media(valores_originais);
   estatisticas.variancia    = variancia(valores_originais, estatisticas.media);
   estatisticas.desvio_padrao= desvio_padrao(estatisticas.variancia);
-  
-  std::vector<float> valores_para_ordenar(valores_originais); 
-  
-  estatisticas.mediana      = mediana(valores_para_ordenar);
-  estatisticas.iqr          = iqr(valores_para_ordenar);
+
+  // Uma única cópia para manter o footprint de memória controlado.
+  // nth_element é in-place; mediana e iqr reutilizam o mesmo vetor.
+  std::vector<float> valores_para_ordenar(valores_originais);
+
+  estatisticas.mediana = mediana(valores_para_ordenar);
+  estatisticas.iqr     = iqr(valores_para_ordenar);
 }
 
 
 float Dataset::media(const std::vector<float>& valores_coluna) {
-  float media = 0;
+  float soma = 0;
+  size_t n = valores_coluna.size();
 
-  for(size_t i = 0; i < (num_linhas); i++){
-    media += valores_coluna[i];
+  // Cada thread acumula sua soma parcial; OpenMP combina ao final sem race condition.
+  #pragma omp parallel for reduction(+:soma) schedule(static)
+  for(size_t i = 0; i < n; i++){
+    soma += valores_coluna[i];
   }
 
-  media = media / (num_linhas);
-  return media;
+  return soma / static_cast<float>(n);
 }
 
 float Dataset::variancia(const std::vector<float>& valores_coluna, float media) {
     float soma = 0;
+    size_t n = valores_coluna.size();
 
-    for (const float& valor : valores_coluna) {
-        float diferenca = valor - media;
+    // Redução paralela: cada thread computa desvios ao quadrado parciais.
+    #pragma omp parallel for reduction(+:soma) schedule(static)
+    for (size_t i = 0; i < n; i++) {
+        float diferenca = valores_coluna[i] - media;
         soma += diferenca * diferenca;
     }
 
-    return soma / valores_coluna.size();
+    return soma / static_cast<float>(n);
 }
 
 float Dataset::desvio_padrao(float variancia) {

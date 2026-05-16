@@ -6,7 +6,7 @@ import sys
 import os
 
 NUM_RUNS = 100
-DATASET = "data/dataset_raw.csv"
+DATASET = "data/02-20-2018.csv"
 
 # Detect OS to select correct binary extension
 EXT = ".exe" if os.name == 'nt' else ""
