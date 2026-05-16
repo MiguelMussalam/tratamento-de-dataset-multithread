@@ -7,17 +7,44 @@
             "command": "/usr/bin/g++",
             "args": [
                 "-g",
-                "src/main.cpp",
-                "src/dataset.cpp",
-                "-Iinclude",
+                "src/multithread/main.cpp",
+                "src/multithread/dataset.cpp",
+                "-Iinclude/multithread",
                 "-std=c++20",
                 "-pthread",
+                "-fopenmp",
                 "-o",
                 "build/main"
             ],
             "group": {
                 "kind": "build",
                 "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": "$gcc"
+        },
+        {
+            "label": "Build C++ Project (Windows)",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-g",
+                "src/multithread/main.cpp",
+                "src/multithread/dataset.cpp",
+                "-Iinclude/multithread",
+                "-std=c++20",
+                "-pthread",
+                "-fopenmp",
+                "-o",
+                "build/main.exe"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
             },
             "presentation": {
                 "reveal": "always",
@@ -34,11 +61,12 @@
                 "-O3",
                 "-g",
                 "-fno-omit-frame-pointer",
-                "src/main.cpp",
-                "src/dataset.cpp",
-                "-Iinclude",
+                "src/multithread/main.cpp",
+                "src/multithread/dataset.cpp",
+                "-Iinclude/multithread",
                 "-std=c++20",
                 "-pthread",
+                "-fopenmp",
                 "-o",
                 "build/main_profiling"
             ],
