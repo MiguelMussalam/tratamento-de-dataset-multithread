@@ -157,7 +157,7 @@ void Dataset::processarLinhas() {
   size_t cursor_init_linha = 0;
   size_t tam_substr = 0;
   int coluna_atual = 0;
-  double v;
+  float v;
   std::string_view linha;
   std::string_view conteudo;
 
@@ -246,9 +246,9 @@ void Dataset::categorizar(std::string_view conteudo, size_t indice_coluna) {
 }
 
 void Dataset::ReprocessarCategorizacao(size_t indice_coluna) {
-  std::vector<double> valores_anteriores = std::move(colunas[indice_coluna].valores);
+  std::vector<float> valores_anteriores = std::move(colunas[indice_coluna].valores);
 
-  for (double val : valores_anteriores) {
+  for (float val : valores_anteriores) {
     char buffer[64];
     auto [ptr, ec] = std::to_chars(buffer, buffer + sizeof(buffer), val);
     std::string_view chave_temp(buffer, ptr - buffer);
@@ -267,7 +267,7 @@ void Dataset::ReprocessarCategorizacao(size_t indice_coluna) {
 }
 
 void Dataset::rotina_coluna_numerica(size_t indice_coluna) {
-  const std::vector<double>& valores_originais = colunas[indice_coluna].valores;
+  const std::vector<float>& valores_originais = colunas[indice_coluna].valores;
   colunas[indice_coluna].estatisticas = std::make_unique<EstatisticasNumericas>();
   EstatisticasNumericas& estatisticas = *colunas[indice_coluna].estatisticas;
 
@@ -275,15 +275,15 @@ void Dataset::rotina_coluna_numerica(size_t indice_coluna) {
   estatisticas.variancia    = variancia(valores_originais, estatisticas.media);
   estatisticas.desvio_padrao= desvio_padrao(estatisticas.variancia);
   
-  std::vector<double> valores_para_ordenar(valores_originais); 
+  std::vector<float> valores_para_ordenar(valores_originais); 
   
   estatisticas.mediana      = mediana(valores_para_ordenar);
   estatisticas.iqr          = iqr(valores_para_ordenar);
 }
 
 
-double Dataset::media(const std::vector<double>& valores_coluna) {
-  double media = 0;
+float Dataset::media(const std::vector<float>& valores_coluna) {
+  float media = 0;
 
   for(size_t i = 0; i < (num_linhas); i++){
     media += valores_coluna[i];
@@ -293,22 +293,22 @@ double Dataset::media(const std::vector<double>& valores_coluna) {
   return media;
 }
 
-double Dataset::variancia(const std::vector<double>& valores_coluna, double media) {
-    double soma = 0;
+float Dataset::variancia(const std::vector<float>& valores_coluna, float media) {
+    float soma = 0;
 
-    for (const double& valor : valores_coluna) {
-        double diferenca = valor - media;
+    for (const float& valor : valores_coluna) {
+        float diferenca = valor - media;
         soma += diferenca * diferenca;
     }
 
     return soma / valores_coluna.size();
 }
 
-double Dataset::desvio_padrao(double variancia) {
+float Dataset::desvio_padrao(float variancia) {
   return std::sqrt(variancia);
 }
 
-double Dataset::mediana(std::vector<double>& valores_coluna) {
+float Dataset::mediana(std::vector<float>& valores_coluna) {
     size_t n = valores_coluna.size();
     size_t meio = n / 2;
 
@@ -317,12 +317,12 @@ double Dataset::mediana(std::vector<double>& valores_coluna) {
     if (n % 2 == 1) {
         return valores_coluna[meio];
     } else {
-        double maior_inferior = *std::max_element(valores_coluna.begin(), valores_coluna.begin() + meio);
-        return (maior_inferior + valores_coluna[meio]) / 2.0;
+        float maior_inferior = *std::max_element(valores_coluna.begin(), valores_coluna.begin() + meio);
+        return (maior_inferior + valores_coluna[meio]) / 2.0f;
     }
 }
 
-double Dataset::iqr(std::vector<double>& valores_coluna) {
+float Dataset::iqr(std::vector<float>& valores_coluna) {
     size_t n = valores_coluna.size();
 
     // Q1 — mediana da metade inferior
@@ -330,14 +330,14 @@ double Dataset::iqr(std::vector<double>& valores_coluna) {
     std::nth_element(valores_coluna.begin(),
                      valores_coluna.begin() + pos_q1,
                      valores_coluna.end());
-    double q1 = valores_coluna[pos_q1];
+    float q1 = valores_coluna[pos_q1];
 
     // Q3 — mediana da metade superior
     size_t pos_q3 = (3 * n) / 4;
     std::nth_element(valores_coluna.begin(),
                      valores_coluna.begin() + pos_q3,
                      valores_coluna.end());
-    double q3 = valores_coluna[pos_q3];
+    float q3 = valores_coluna[pos_q3];
 
     return q3 - q1;
 }

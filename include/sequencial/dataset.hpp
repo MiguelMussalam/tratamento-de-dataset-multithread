@@ -24,11 +24,11 @@ struct StringHash {
 using CategoriaMap = std::unordered_map<std::string_view, int, StringHash, std::equal_to<>>;
 
 struct EstatisticasNumericas{
-  double media = 0;
-  double mediana = 0;
-  double variancia = 0;
-  double desvio_padrao = 0;
-  double iqr = 0;
+  float media = 0;
+  float mediana = 0;
+  float variancia = 0;
+  float desvio_padrao = 0;
+  float iqr = 0;
 };
 
 enum TipoColuna { CATEGORICA, NUMERICA, DESCONHECIDA };
@@ -60,7 +60,7 @@ struct Coluna {
   std::string nome;
   TipoColuna tipo = DESCONHECIDA;
 
-  std::vector<double> valores;
+  std::vector<float> valores;
   StringPool reservatorio;
   CategoriaMap mapeamento;
   std::vector<std::string_view> categorias;
@@ -86,11 +86,11 @@ private:
   void ReprocessarCategorizacao(size_t indice_atual);
 
   void rotina_coluna_numerica(size_t indice_coluna);
-  double media(const std::vector<double>& valores_coluna);
-  double variancia(const std::vector<double>& valores_coluna, double media);
-  double desvio_padrao(double variancia);
-  double mediana(std::vector<double>& valores_coluna);
-  double iqr(std::vector<double>& valores_coluna);
+  float media(const std::vector<float>& valores_coluna);
+  float variancia(const std::vector<float>& valores_coluna, float media);
+  float desvio_padrao(float variancia);
+  float mediana(std::vector<float>& valores_coluna);
+  float iqr(std::vector<float>& valores_coluna);
 
 
 public:

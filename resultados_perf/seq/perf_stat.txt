@@ -1,0 +1,27 @@
+# started on Sat May 16 19:39:38 2026
+
+
+ Performance counter stats for './build/main_seq data/02-20-2018.csv':
+
+         17.667,11 msec task-clock:u                                                          
+           946.500      page-faults:u                                                         
+    30.364.340.441      cpu_atom/branches/u                                                     (0,09%)
+    38.642.622.255      cpu_core/branches/u                                                     (99,91%)
+       348.963.143      cpu_atom/branch-misses/u                                                (0,09%)
+       766.174.640      cpu_core/branch-misses/u                                                (99,91%)
+   139.565.348.945      cpu_atom/instructions/u                                                 (0,09%)
+   184.942.785.283      cpu_core/instructions/u                                                 (99,91%)
+    62.470.649.168      cpu_atom/cycles/u                                                       (0,09%)
+    81.862.379.473      cpu_core/cycles/u                                                       (99,91%)
+       206.772.484      cpu_core/L1-dcache-load-misses/u                                        (99,91%)
+        45.865.472      cpu_atom/LLC-loads/u                                                    (0,09%)
+       102.886.944      cpu_core/LLC-loads/u                                                    (99,91%)
+            17.901      cpu_atom/LLC-load-misses/u                                              (0,09%)
+        56.847.427      cpu_core/LLC-load-misses/u                                              (99,91%)
+
+      20,491857383 seconds time elapsed
+
+      16,397688000 seconds user
+       1,256795000 seconds sys
+
+
