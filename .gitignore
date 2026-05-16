@@ -1,8 +1,6 @@
 build/*
 !build/.gitkeep
-resultados_perf/**/*.data
-resultados_perf/**/*.data.old
-resultados_perf/**/perf_trace.txt
+
 *.exe
 *.out
 *.csv
