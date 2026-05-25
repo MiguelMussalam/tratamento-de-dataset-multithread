@@ -1,13 +1,13 @@
 #include "dataset.hpp"
 #include <algorithm>
 #include <charconv>
+#include <immintrin.h>
 #include <iomanip>
 #include <iostream>
 #include <math.h>
 #include <omp.h>
 #include <string>
 #include <vector>
-
 
 Dataset::Dataset(const char *caminho) {
   // Habilita paralelismo aninhado: o loop das colunas já é paralelo,
@@ -189,6 +189,59 @@ void Dataset::inferirTipos() {
   }
 }
 
+// Conta ocorrências de '\n' em data[0..len).
+// Usa AVX2 (32 bytes/iteração) quando disponível; cai para escalar caso
+// contrário.
+static size_t contar_newlines(const char *data, size_t len) {
+  size_t count = 0;
+#ifdef __AVX2__
+  const __m256i nl = _mm256_set1_epi8('\n');
+  size_t i = 0;
+  for (; i + 32 <= len; i += 32) {
+    __m256i chunk =
+        _mm256_loadu_si256(reinterpret_cast<const __m256i *>(data + i));
+    __m256i cmp = _mm256_cmpeq_epi8(chunk, nl); // 32 comparações simultâneas
+    uint32_t mask = static_cast<uint32_t>(_mm256_movemask_epi8(cmp)); // bitmask
+    count += static_cast<size_t>(__builtin_popcount(mask)); // conta bits
+  }
+  for (; i < len; i++)
+    count += (data[i] == '\n'); // tail escalar
+#else
+  for (size_t i = 0; i < len; i++)
+    count += (data[i] == '\n');
+#endif
+  return count;
+}
+
+// Retorna o índice do próximo 'delim' em data[start..len), ou npos se não
+// encontrar. Usa AVX2 (32 bytes/iteração): __builtin_ctz dá a posição do 1º bit
+// 1 no mask.
+static size_t encontrar_proximo(const char *data, size_t start, size_t len,
+                                char delim) {
+#ifdef __AVX2__
+  const __m256i vd = _mm256_set1_epi8(delim);
+  size_t i = start;
+  for (; i + 32 <= len; i += 32) {
+    __m256i chunk =
+        _mm256_loadu_si256(reinterpret_cast<const __m256i *>(data + i));
+    __m256i cmp = _mm256_cmpeq_epi8(chunk, vd);
+    uint32_t mask = static_cast<uint32_t>(_mm256_movemask_epi8(cmp));
+    if (mask != 0)
+      return i +
+             static_cast<size_t>(__builtin_ctz(mask)); // posição do 1º match
+  }
+  for (; i < len; i++)
+    if (data[i] == delim)
+      return i;
+  return std::string_view::npos;
+#else
+  for (size_t i = start; i < len; i++)
+    if (data[i] == delim)
+      return i;
+  return std::string_view::npos;
+#endif
+}
+
 void Dataset::contarLinhasParalelo() {
   size_t data_start = cabecalho_size;
   size_t data_size = arquivo.size() - data_start;
@@ -233,16 +286,13 @@ void Dataset::contarLinhasParalelo() {
 
     blocos_bytes[tid] = {inicio, fim};
 
-    size_t count = 0;
-    for (size_t i = inicio; i < fim; i++) {
-      if (arquivo[i] == '\n')
-        count++;
-    }
-    if (tid == num_threads - 1 && fim > inicio && arquivo[fim - 1] != '\n') {
-      count++;
-    }
+    linhas_por_thread[tid] =
+        contar_newlines(arquivo.data() + inicio, fim - inicio);
 
-    linhas_por_thread[tid] = count;
+    // Última linha do arquivo sem '\n' final: conta como linha extra
+    if (tid == num_threads - 1 && fim > inicio && arquivo[fim - 1] != '\n') {
+      linhas_por_thread[tid]++;
+    }
   }
 
   num_linhas = 0;
@@ -282,7 +332,8 @@ void Dataset::processarBloco(size_t inicio_byte, size_t fim_byte,
   size_t indice_linha = linha_inicial;
 
   while (cursor < fim_byte) {
-    size_t fim_linha = arquivo.find('\n', cursor);
+    size_t fim_linha =
+        encontrar_proximo(arquivo.data(), cursor, arquivo.size(), '\n');
     std::string_view linha = arquivo.substr(
         cursor, fim_linha == std::string_view::npos ? arquivo.size() - cursor
                                                     : fim_linha - cursor);
@@ -295,7 +346,7 @@ void Dataset::processarBloco(size_t inicio_byte, size_t fim_byte,
     float v;
 
     while (ini < linha.size() && j < num_colunas) {
-      size_t virgula = linha.find(',', ini);
+      size_t virgula = encontrar_proximo(linha.data(), ini, linha.size(), ',');
       std::string_view cel = (virgula == std::string_view::npos)
                                  ? linha.substr(ini)
                                  : linha.substr(ini, virgula - ini);

@@ -32,6 +32,12 @@ Após o processamento de cada bloco do arquivo, o programa emite uma chamada `ma
 
 Na versão multithread, o tipo de cada coluna (numérica ou categórica) é inferido a partir das primeiras 10 linhas do arquivo antes do *parsing* completo, permitindo que a alocação dos vetores de resultado seja feita de forma prévia e contígua (`std::vector::resize`), sem realocações incrementais durante o processamento.
 
+### Aceleração SIMD (AVX2)
+
+A leitura do arquivo e o *parsing* utilizam instruções SIMD (Single Instruction, Multiple Data) manuais via registradores AVX2 de 256 bits (32 bytes processados por ciclo de CPU) se a CPU der suporte (com fallback dinâmico ou estático):
+- **Contagem de Linhas (`contar_newlines`):** Processa blocos de 32 bytes em uma única instrução, gerando uma máscara de bits de correspondência com `\n` via `_mm256_cmpeq_epi8` e acumulando o resultado ultrarrápido com `__builtin_popcount` sobre a máscara de bits gerada por `_mm256_movemask_epi8`.
+- **Busca de Delimitadores (`encontrar_proximo`):** A localização do delimitador de fim de linha (`\n`) e delimitador de coluna (`,`) na rotina `processarBloco()` processa 32 bytes simultaneamente. A máscara resultante de `_mm256_movemask_epi8` é consultada com `__builtin_ctz` (count trailing zeros) para encontrar o índice do primeiro caractere correspondente de forma instantânea, eliminando a lentidão do *parsing* escalar byte a byte.
+
 ---
 
 ## Estrutura do Repositório
@@ -131,5 +137,5 @@ make clean
 O projeto requer GCC com suporte a C++20 e OpenMP.
 
 ```
-Flags: -O3 -g -fno-omit-frame-pointer -std=c++20 -pthread -fopenmp
+Flags: -O3 -march=native -g -fno-omit-frame-pointer -std=c++20 -pthread -fopenmp
 ```

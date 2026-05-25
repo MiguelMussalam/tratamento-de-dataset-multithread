@@ -23,5 +23,3 @@ tratamento-de-dataset-multithread/
 ```bash
 make run_mt DATASET=data/seu_dataset.csv
 ```
-
-Esse comando já compila e executa a versão multithread automaticamente.
