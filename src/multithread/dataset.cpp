@@ -1,6 +1,7 @@
 #include "dataset.hpp"
 #include <algorithm>
 #include <charconv>
+#include <cstdint>
 #include <immintrin.h>
 #include <iomanip>
 #include <iostream>
