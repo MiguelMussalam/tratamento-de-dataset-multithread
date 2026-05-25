@@ -13,6 +13,8 @@
 #include <memory>
 #include <string_view>
 #include <algorithm>
+#include <limits>
+#include <cmath>
 
 struct StringHash {
     using is_transparent = void;
@@ -66,6 +68,7 @@ struct Coluna {
   CategoriaMap mapeamento;
   std::vector<std::string_view> categorias;
   std::unique_ptr<EstatisticasNumericas> estatisticas;
+  bool erro_categorico = false;
 };
 
 class Dataset {

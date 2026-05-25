@@ -13,23 +13,14 @@ Dataset::Dataset(const char *caminho){
   // e as funções internas (media, variancia) também criarão sub-regiões paralelas.
   omp_set_max_active_levels(2);
 
-  double t0, t1;
-
-  t0 = omp_get_wtime();
   mapearArquivo(caminho);
   lerCabecalho();
   inferirTipos();
-  t1 = omp_get_wtime();
-  std::cerr << "[FASE] mapeamento+cabecalho: " << (t1-t0)*1000 << " ms\n";
 
-  t0 = omp_get_wtime();
   contarLinhasParalelo();
   alocarVetores();
   processarLinhasParalelo();
-  t1 = omp_get_wtime();
-  std::cerr << "[FASE] parsing linhas:        " << (t1-t0)*1000 << " ms\n";
 
-  t0 = omp_get_wtime();
   #pragma omp parallel for schedule(dynamic)
   for(size_t i = 0; i < num_colunas; i++){
     if(colunas[i].tipo == CATEGORICA){
@@ -38,9 +29,6 @@ Dataset::Dataset(const char *caminho){
       rotina_coluna_numerica(i);
     }
   }
-  t1 = omp_get_wtime();
-  std::cerr << "[FASE] categoriz+numerica:    " << (t1-t0)*1000 << " ms\n";
-  std::cerr << "[FASE] threads ativos neste nivel: " << omp_get_max_threads() << "\n";
 
   if (mapped) {
 #ifdef _WIN32
@@ -181,13 +169,16 @@ void Dataset::contarLinhasParalelo() {
     size_t data_size = arquivo.size() - data_start;
     
     int num_threads = omp_get_max_threads();
+    if (num_threads > 1 && data_size / num_threads < 1024) {
+        num_threads = 1;
+    }
     size_t chunk_size = data_size / num_threads;
     
     blocos_bytes.resize(num_threads);
     blocos_linhas_iniciais.resize(num_threads, 0);
     std::vector<size_t> linhas_por_thread(num_threads, 0);
 
-    #pragma omp parallel
+    #pragma omp parallel num_threads(num_threads)
     {
         int tid = omp_get_thread_num();
         size_t inicio = data_start + tid * chunk_size;
@@ -196,6 +187,12 @@ void Dataset::contarLinhasParalelo() {
         if (tid > 0) {
             while (inicio < arquivo.size() && arquivo[inicio - 1] != '\n') {
                 inicio++;
+            }
+        }
+        
+        if (tid < num_threads - 1) {
+            while (fim < arquivo.size() && arquivo[fim - 1] != '\n') {
+                fim++;
             }
         }
         
@@ -214,7 +211,7 @@ void Dataset::contarLinhasParalelo() {
         for (size_t i = inicio; i < fim; i++) {
             if (arquivo[i] == '\n') count++;
         }
-        if (tid == num_threads - 1 && fim > 0 && arquivo[fim - 1] != '\n' && fim > inicio) {
+        if (tid == num_threads - 1 && fim > inicio && arquivo[fim - 1] != '\n') {
             count++; 
         }
         
@@ -231,7 +228,7 @@ void Dataset::contarLinhasParalelo() {
 void Dataset::alocarVetores() {
     for (auto& col : colunas) {
         if (col.tipo == NUMERICA) {
-            col.valores.resize(num_linhas, 0.0f);
+            col.valores.resize(num_linhas, std::numeric_limits<float>::quiet_NaN());
         } else {
             col.valores.resize(num_linhas, 0.0f); 
             col.raw_strings.resize(num_linhas, std::string_view()); 
@@ -328,6 +325,20 @@ void Dataset::categorizarColuna(size_t indice_coluna) {
 
 void Dataset::rotina_coluna_numerica(size_t indice_coluna) {
   const std::vector<float>& valores_originais = colunas[indice_coluna].valores;
+
+  int tem_nan = 0;
+  #pragma omp parallel for reduction(+:tem_nan) schedule(static)
+  for (size_t i = 0; i < valores_originais.size(); i++) {
+      if (std::isnan(valores_originais[i])) {
+          tem_nan = 1;
+      }
+  }
+
+  if (tem_nan > 0) {
+      colunas[indice_coluna].erro_categorico = true;
+      return;
+  }
+
   colunas[indice_coluna].estatisticas = std::make_unique<EstatisticasNumericas>();
   EstatisticasNumericas& estatisticas = *colunas[indice_coluna].estatisticas;
 
@@ -423,7 +434,10 @@ void Dataset::print() {
     for (size_t j = 0; j < num_colunas; j++) {
         std::cout << std::left << std::setw(30) << colunas[j].nome;
 
-        if (colunas[j].tipo == NUMERICA && colunas[j].estatisticas) {
+        if (colunas[j].erro_categorico) {
+            std::cout << std::setw(14) << "NUMERICA"
+                      << "Nao foi possivel fazer estatistica descritiva: Encontrado valor categorico no meio da estatistica";
+        } else if (colunas[j].tipo == NUMERICA && colunas[j].estatisticas) {
             std::cout << std::setw(14) << "NUMERICA"
                       << std::fixed << std::setprecision(2)
                       << std::setw(14) << colunas[j].estatisticas->media
