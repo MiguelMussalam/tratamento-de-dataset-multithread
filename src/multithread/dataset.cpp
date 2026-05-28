@@ -9,12 +9,15 @@
 #include <omp.h>
 #include <string>
 #include <vector>
+#include <chrono>
 
 Dataset::Dataset(const char *caminho) {
   // Habilita paralelismo aninhado: o loop das colunas já é paralelo,
   // e as funções internas (media, variancia) também criarão sub-regiões
   // paralelas.
   omp_set_max_active_levels(2);
+
+  auto t_start = std::chrono::high_resolution_clock::now();
 
   mapearArquivo(caminho);
   lerCabecalho();
@@ -24,6 +27,8 @@ Dataset::Dataset(const char *caminho) {
   alocarVetores();
   processarLinhasParalelo();
 
+  auto t_parsing = std::chrono::high_resolution_clock::now();
+
 #pragma omp parallel for schedule(dynamic)
   for (size_t i = 0; i < num_colunas; i++) {
     if (colunas[i].tipo == CATEGORICA) {
@@ -32,6 +37,14 @@ Dataset::Dataset(const char *caminho) {
       rotina_coluna_numerica(i);
     }
   }
+
+  auto t_end = std::chrono::high_resolution_clock::now();
+
+  double parsing_ms = std::chrono::duration<double, std::milli>(t_parsing - t_start).count();
+  double routine_ms = std::chrono::duration<double, std::milli>(t_end - t_parsing).count();
+
+  std::cerr << "[FASE] Leitura e Parsing: " << parsing_ms << " ms\n";
+  std::cerr << "[FASE] Rotina Numerica: " << routine_ms << " ms\n";
 
   if (mapped) {
 #ifdef _WIN32

@@ -6,17 +6,30 @@
 #include <math.h>
 #include <algorithm>
 #include <iomanip>
+#include <chrono>
 
 Dataset::Dataset(const char *caminho){
+  auto t_start = std::chrono::high_resolution_clock::now();
+
   mapearArquivo(caminho);
   lerCabecalho();
   processarLinhas();
+
+  auto t_parsing = std::chrono::high_resolution_clock::now();
   
   for(size_t i = 0; i < num_colunas; i++){
     if(colunas[i].tipo == NUMERICA){
       rotina_coluna_numerica(i);
     }
   }
+
+  auto t_end = std::chrono::high_resolution_clock::now();
+
+  double parsing_ms = std::chrono::duration<double, std::milli>(t_parsing - t_start).count();
+  double routine_ms = std::chrono::duration<double, std::milli>(t_end - t_parsing).count();
+
+  std::cerr << "[FASE] Leitura e Parsing: " << parsing_ms << " ms\n";
+  std::cerr << "[FASE] Rotina Numerica: " << routine_ms << " ms\n";
 
   if (mapped) {
 #ifdef _WIN32
@@ -29,6 +42,7 @@ Dataset::Dataset(const char *caminho){
       mapped = nullptr;
   }
 }
+
 
 void Dataset::mapearArquivo(const char *caminho) {
   std::cout << "Iniciando leitura..." << std::endl;
