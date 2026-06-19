@@ -542,12 +542,32 @@ void Dataset::rotina_coluna_numerica(size_t indice_coluna) {
   estatisticas.variancia = variancia(valores_originais, estatisticas.media);
   estatisticas.desvio_padrao = desvio_padrao(estatisticas.variancia);
 
-  // Uma única cópia para manter o footprint de memória controlado.
-  // nth_element é in-place; mediana e iqr reutilizam o mesmo vetor.
-  std::vector<float> valores_para_ordenar(valores_originais);
+  // --- T-Digest calculation ---
+  size_t n = valores_originais.size();
+  int num_threads_internas = omp_get_max_threads();
+  std::vector<tdigest::TDigest> digests_locais;
+  for (int t = 0; t < num_threads_internas; t++) {
+    digests_locais.emplace_back(1000); // compression factor 1000
+  }
 
-  estatisticas.mediana = mediana(valores_para_ordenar);
-  estatisticas.iqr = iqr(valores_para_ordenar);
+#pragma omp parallel num_threads(num_threads_internas)
+  {
+    int tid = omp_get_thread_num();
+#pragma omp for schedule(static)
+    for (size_t i = 0; i < n; i++) {
+      digests_locais[tid].add(valores_originais[i]);
+    }
+  }
+
+  tdigest::TDigest digest_final(1000);
+  for (auto &d : digests_locais) {
+    digest_final.merge(&d);
+  }
+
+  estatisticas.mediana = digest_final.quantile(0.5);
+  double q1 = digest_final.quantile(0.25);
+  double q3 = digest_final.quantile(0.75);
+  estatisticas.iqr = q3 - q1;
 }
 
 float Dataset::media(const std::vector<float> &valores_coluna) {
@@ -581,39 +601,7 @@ float Dataset::variancia(const std::vector<float> &valores_coluna,
 
 float Dataset::desvio_padrao(float variancia) { return std::sqrt(variancia); }
 
-float Dataset::mediana(std::vector<float> &valores_coluna) {
-  size_t n = valores_coluna.size();
-  size_t meio = n / 2;
 
-  std::nth_element(valores_coluna.begin(), valores_coluna.begin() + meio,
-                   valores_coluna.end());
-
-  if (n % 2 == 1) {
-    return valores_coluna[meio];
-  } else {
-    float maior_inferior = *std::max_element(valores_coluna.begin(),
-                                             valores_coluna.begin() + meio);
-    return (maior_inferior + valores_coluna[meio]) / 2.0f;
-  }
-}
-
-float Dataset::iqr(std::vector<float> &valores_coluna) {
-  size_t n = valores_coluna.size();
-
-  // Q1 — mediana da metade inferior
-  size_t pos_q1 = n / 4;
-  std::nth_element(valores_coluna.begin(), valores_coluna.begin() + pos_q1,
-                   valores_coluna.end());
-  float q1 = valores_coluna[pos_q1];
-
-  // Q3 — mediana da metade superior
-  size_t pos_q3 = (3 * n) / 4;
-  std::nth_element(valores_coluna.begin(), valores_coluna.begin() + pos_q3,
-                   valores_coluna.end());
-  float q3 = valores_coluna[pos_q3];
-
-  return q3 - q1;
-}
 
 void Dataset::print() {
   std::cout << std::left << std::setw(30) << "Coluna" << std::setw(14) << "Tipo"

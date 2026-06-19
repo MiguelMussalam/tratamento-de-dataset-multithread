@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include "tdigest2/TDigest.h"
 #ifdef _WIN32
 #include <windows.h>
 #else
@@ -108,8 +109,6 @@ private:
   float media(const std::vector<float>& valores_coluna);
   float variancia(const std::vector<float>& valores_coluna, float media);
   float desvio_padrao(float variancia);
-  float mediana(std::vector<float>& valores_coluna);
-  float iqr(std::vector<float>& valores_coluna);
 
 
 public:
