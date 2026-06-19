@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 #include <chrono>
+#include <fstream>
 
 Dataset::Dataset(const char *caminho) {
   // Habilita paralelismo aninhado: o loop das colunas já é paralelo,
@@ -327,16 +328,115 @@ void Dataset::alocarVetores() {
   }
 }
 
-void Dataset::processarLinhasParalelo() {
+size_t Dataset::detectarTamanhoL3() {
+#ifdef _WIN32
+  DWORD tamanho_buffer = 0;
+  GetLogicalProcessorInformation(nullptr, &tamanho_buffer);
+  if (tamanho_buffer == 0) {
+    return 8 * 1024 * 1024; // fallback conservador: 8 MB
+  }
+
+  std::vector<char> buffer(tamanho_buffer);
+  auto* info = reinterpret_cast<SYSTEM_LOGICAL_PROCESSOR_INFORMATION*>(buffer.data());
+
+  if (!GetLogicalProcessorInformation(info, &tamanho_buffer)) {
+    return 8 * 1024 * 1024; // fallback conservador: 8 MB
+  }
+
+  size_t count = tamanho_buffer / sizeof(SYSTEM_LOGICAL_PROCESSOR_INFORMATION);
+  for (size_t i = 0; i < count; i++) {
+    if (info[i].Relationship == RelationCache &&
+        info[i].Cache.Level == 3) {
+      return info[i].Cache.Size;
+    }
+  }
+  return 8 * 1024 * 1024; // fallback conservador: 8 MB
+#else
+  for (int idx = 2; idx <= 3; idx++) {
+    std::string caminho_level = "/sys/devices/system/cpu/cpu0/cache/index"
+                                 + std::to_string(idx) + "/level";
+    std::string caminho_size  = "/sys/devices/system/cpu/cpu0/cache/index"
+                                 + std::to_string(idx) + "/size";
+
+    std::ifstream level_file(caminho_level);
+    std::ifstream size_file(caminho_size);
+    if (!level_file || !size_file) continue;
+
+    int level;
+    level_file >> level;
+    if (level != 3) continue;
+
+    std::string size_str;
+    size_file >> size_str; // formato: "13312K" ou "13M"
+
+    if (size_str.empty()) continue;
+    size_t valor = std::stoul(size_str);
+    if (size_str.back() == 'K') return valor * 1024;
+    if (size_str.back() == 'M') return valor * 1024 * 1024;
+    return valor;
+  }
+  return 8 * 1024 * 1024; // fallback conservador: 8 MB
+#endif
+}
+
+size_t Dataset::calcularTamanhoChunk(size_t l3_bytes, int num_threads_ativas) {
+  constexpr double FATOR_SEGURANCA = 0.75;
+  int threads = num_threads_ativas > 0 ? num_threads_ativas : 1;
+  size_t l3_utilizavel = static_cast<size_t>(l3_bytes * FATOR_SEGURANCA);
+  size_t calculated = l3_utilizavel / threads;
+  return std::max<size_t>(calculated, 256 * 1024); // Lower bound: 256 KB
+}
+
+std::vector<ChunkInfo> Dataset::calcularChunks(size_t chunk_size) {
+  std::vector<ChunkInfo> chunks;
   int num_threads = blocos_bytes.size();
 
-#pragma omp parallel
-  {
-    int tid = omp_get_thread_num();
-    if (tid < num_threads) {
-      processarBloco(blocos_bytes[tid].first, blocos_bytes[tid].second,
-                     blocos_linhas_iniciais[tid]);
+  for (int tid = 0; tid < num_threads; tid++) {
+    size_t bloco_inicio = blocos_bytes[tid].first;
+    size_t bloco_fim = blocos_bytes[tid].second;
+    size_t linha_atual = blocos_linhas_iniciais[tid];
+
+    size_t inicio = bloco_inicio;
+    while (inicio < bloco_fim) {
+      size_t proposto_fim = inicio + chunk_size;
+      size_t fim = proposto_fim;
+
+      if (fim >= bloco_fim) {
+        fim = bloco_fim;
+      } else {
+        // Align to the next newline
+        while (fim < bloco_fim && arquivo[fim - 1] != '\n') {
+          fim++;
+        }
+      }
+
+      size_t num_linhas_chunk = contar_newlines(arquivo.data() + inicio, fim - inicio);
+      
+      // Last line of the file without final '\n' count handling
+      if (fim == arquivo.size() && fim > inicio && arquivo[fim - 1] != '\n') {
+        num_linhas_chunk++;
+      }
+
+      chunks.push_back({inicio, fim, linha_atual});
+
+      linha_atual += num_linhas_chunk;
+      inicio = fim;
     }
+  }
+
+  return chunks;
+}
+
+void Dataset::processarLinhasParalelo() {
+  size_t l3_total = detectarTamanhoL3();
+  int num_threads = omp_get_max_threads();
+  size_t chunk_size = calcularTamanhoChunk(l3_total, num_threads);
+  
+  std::vector<ChunkInfo> chunks = calcularChunks(chunk_size);
+
+#pragma omp parallel for schedule(dynamic, 1)
+  for (size_t i = 0; i < chunks.size(); i++) {
+    processarBloco(chunks[i].inicio_byte, chunks[i].fim_byte, chunks[i].linha_inicial);
   }
 }
 

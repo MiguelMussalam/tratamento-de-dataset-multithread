@@ -63,12 +63,18 @@ struct Coluna {
   TipoColuna tipo = DESCONHECIDA;
 
   std::vector<float> valores;
-  std::vector<std::string_view> raw_strings; // Salva o ponteiro sem parsear
+  std::vector<std::string_view> raw_strings;
   StringPool reservatorio;
   CategoriaMap mapeamento;
   std::vector<std::string_view> categorias;
   std::unique_ptr<EstatisticasNumericas> estatisticas;
   bool erro_categorico = false;
+};
+
+struct ChunkInfo {
+  size_t inicio_byte;
+  size_t fim_byte;
+  size_t linha_inicial;
 };
 
 class Dataset {
@@ -93,6 +99,10 @@ private:
   void processarLinhasParalelo();
   void processarBloco(size_t inicio_byte, size_t fim_byte, size_t linha_inicial);
   void categorizarColuna(size_t indice_coluna);
+
+  size_t detectarTamanhoL3();
+  size_t calcularTamanhoChunk(size_t l3_bytes, int num_threads_ativas);
+  std::vector<ChunkInfo> calcularChunks(size_t chunk_size);
 
   void rotina_coluna_numerica(size_t indice_coluna);
   float media(const std::vector<float>& valores_coluna);
